@@ -2,51 +2,53 @@ import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Swal from 'sweetalert2'
 
+import { useMutation } from 'react-query';
+import { API } from "../config/api";
 
 const ModalLogin = (props) => {
-  const {showModal, hideModal, toRegister, Users} = props
+  const {showModal, hideModal, toRegister} = props
   // agar submit tidak merefresh
-  const [errorMessage, setErrorMessage] = useState("");
   const [formLogin, setFormLogin] = useState({
     email: "",
     password: ""
   });
-  const formLoginOnChange = (e) => {
+  const ChangeLogin = (e) => {
     setFormLogin({
       ...formLogin,
       [e.target.name]: e.target.value,
     });
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (Users.some(user => user.email === formLogin.email)) {
-      let User = Users.filter(User => User.email === formLogin.email);
-      User = User[0];
-      if (User.password === formLogin.password) {
-        hideModal();
-        props.setIsUser(true)
-        props.setIsAdmin(User.isAdmin)
-        props.linkToAdmin()
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'You Are Logged In',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      } else {
-        setErrorMessage("Invalid password")
-      }
-    } else {
-      setErrorMessage("Invalid email")
-    }
 
-    setFormLogin((formLogin) => ({
-      ...formLogin,
-      email: "",
-      password: ""
-    }));
-  }
+  const SubmitLogin = useMutation(async (e) => {
+    try {
+      e.preventDefault();
+  
+      const response = await API.post('/login', formLogin);
+  
+      console.log("login success : ", response)
+  
+      setFormLogin({
+        email: '',
+        password: '',
+      });
+      hideModal()
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Login Success',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    } catch (error) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Login Failed',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+  });
 
 
   return (
@@ -58,21 +60,18 @@ const ModalLogin = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={(e) => SubmitLogin.mutate(e)}>
             <Form.Group className="mb-3">
-              <Form.Control type="email" placeholder="Email" name="email" className="formInput" value={formLogin.email} onChange={formLoginOnChange} />
+              <Form.Control type="email" placeholder="Email" name="email" className="formInput" value={formLogin.email} onChange={ChangeLogin} />
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Control type="password" placeholder="Password" name="password" className="formInput" value={formLogin.password} onChange={formLoginOnChange} />
+              <Form.Control type="password" placeholder="Password" name="password" className="formInput" value={formLogin.password} onChange={ChangeLogin} />
             </Form.Group>
             <Button variant="secondary col-12 mb-3" type="submit" style={{ backgroundColor: "#613D2B" }}>
               Login
             </Button>
-            {errorMessage && (
               <p style={{ color: "red", textAlign: "center" }}>
-                {errorMessage}
               </p>
-            )}
             <p style={{ textAlign: "center", fontSize: ".9rem" }}>
               Don't have an account ?{" "}
               <span
