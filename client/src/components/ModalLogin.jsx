@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Swal from 'sweetalert2'
 
 import { useMutation } from 'react-query';
-import { API } from "../config/api";
+import { API, setAuthToken } from "../config/api";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/contextUser";
 
 const ModalLogin = (props) => {
-  const {showModal, hideModal, toRegister} = props
+  let navigate = useNavigate();
+
+  const {showModal, hideModal, toRegister, setIsAdmin, setIsUser} = props
   // agar submit tidak merefresh
+
+  const [_, dispatch] = useContext(UserContext);
+  console.log(_);
+
   const [formLogin, setFormLogin] = useState({
     email: "",
     password: ""
@@ -26,6 +34,13 @@ const ModalLogin = (props) => {
       const response = await API.post('/login', formLogin);
   
       console.log("login success : ", response)
+
+      // Send data to useContext
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        payload: response.data.data,
+      });
+      setAuthToken(localStorage.token);
   
       setFormLogin({
         email: '',
@@ -39,6 +54,15 @@ const ModalLogin = (props) => {
         showConfirmButton: false,
         timer: 1500
       })
+
+      // Status check
+      if (response.data.data.name === 'admin') {
+        navigate('/list-income');
+        setIsAdmin(true)
+      } else {
+        navigate('/');
+        setIsUser(true)
+      }
     } catch (error) {
       Swal.fire({
         position: 'center',
