@@ -7,7 +7,6 @@ import dataTransaction from "../assets/json/transaction.json"
 import dataUsers from "../assets/json/users.json"
 import RouteAdmin from "./RouteAdmin";
 import RouteUser from "./RouteUser";
-//
 
 const MainApp = () => {
   //state global product

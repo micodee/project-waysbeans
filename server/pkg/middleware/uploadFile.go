@@ -19,6 +19,12 @@ func UploadFile(next echo.HandlerFunc) echo.HandlerFunc {
 				return next(c)
 			}
 		}
+		if err != nil {
+			if method == "POST" && err.Error() == "http: no such file" {
+				c.Set("dataFile", "")
+				return next(c)
+			}
+		}
 		
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, err.Error())
