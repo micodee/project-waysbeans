@@ -1,56 +1,89 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { API } from "../config/api";
+import { useMutation } from "react-query";
 
 
-const ProductUpdate = (props) => {
-  const { Products, SetProducts, formUpdateProduct, setformUpdateProduct } = props
+const ProductUpdate = () => {
+  let navigate = useNavigate();
+  const { id } = useParams();
 
-  const navigate = useNavigate();
+  const [imageUrl, setImageUrl] = useState("");
+  const [formUpdateProduct, setForm] = useState({
+    photo: '',
+    name: '',
+    desc: '',
+    price: '',
+    stock: '',
+  }); //Store product data
 
-  const params = useParams();
-  let Product = Products.filter(Product => Product.id === parseInt(params.id));
-  Product = Product[0];
-  const [imageUrl, setImageUrl] = useState(Product.image);
+  async function getDataUpdate() {
+    const responseProduct = await API.get('/product/' + id);
+    setImageUrl(`http://localhost:5001/uploads/` + responseProduct.data.data.photo);
 
-
-  const updateProductOnChange = (e) => {
-    setformUpdateProduct({
+    setForm({
       ...formUpdateProduct,
-      [e.target.name]: e.target.value,
+      name: responseProduct.data.data.name,
+      desc: responseProduct.data.data.description,
+      price: responseProduct.data.data.price,
+      stock: responseProduct.data.data.stock,
     });
-  };
+  }
 
-  const updateProductOnSubmit = (e) => {
-    e.preventDefault();
-    const newProductWithImage = {
+  useEffect(() => {
+    getDataUpdate()
+  }, []);
+
+   // Handle change data on form
+   const handleChange = (e) => {
+    setForm({
       ...formUpdateProduct,
-      image: imageUrl,
-    };
-    const indexToDelete = Products.findIndex(item => item.id === newProductWithImage.id);
-    if (indexToDelete !== -1) {
-      Products.splice(indexToDelete, 1);
-      Products.splice(indexToDelete, 0, newProductWithImage);
+      [e.target.name]:
+        e.target.type === 'file' ? e.target.files : e.target.value,
+    });
+
+    // Create image url for preview
+    if (e.target.type === 'file') {
+      let url = URL.createObjectURL(e.target.files[0]);
+      setImageUrl(url);
     }
-    SetProducts([...Products]);
-    
-    setformUpdateProduct((formUpdateProduct) => ({
-      ...formUpdateProduct,
-      name: "",
-      stock: "",
-      price: "",
-      description: "",
-      image: "",
-    }));
-
-    navigate('/list-product')
   };
 
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    const imageUrl = URL.createObjectURL(file);
-    setImageUrl(imageUrl);
-  };
+  const handleSubmit = useMutation(async (e) => {
+    try {
+      e.preventDefault();
+
+      // Configuration
+      const config = {
+        headers: {
+          'Content-type': 'multipart/form-data',
+        },
+      };
+
+      // Store data with FormData as object
+      const formData = new FormData();
+      if (formUpdateProduct.photo) {
+        formData.set('photo', formUpdateProduct?.photo[0], formUpdateProduct?.photo[0]?.name);
+      }
+      formData.set('name', formUpdateProduct.name);
+      formData.set('desc', formUpdateProduct.desc);
+      formData.set('price', formUpdateProduct.price);
+      formData.set('stock', formUpdateProduct.stock);
+
+      const response = await API.patch(
+        '/product/' + id,
+        formData,
+        config
+      );
+      console.log(response.data);
+
+      navigate('/list-product');
+    } catch (error) {
+      console.log(error);
+    }
+  });
+  
 
   return (
     <Container className="detail col-9 productadd">
@@ -58,21 +91,21 @@ const ProductUpdate = (props) => {
         <Col className="header col-6 d-flex justify-content-center align-items-center">
           <div className="col-12">
             <h2 style={{ color: "#613D2B", fontWeight: "900", marginBottom: "1.5rem" }}>Update Product</h2>
-            <Form onSubmit={updateProductOnSubmit}>
+            <Form onSubmit={(e) => handleSubmit.mutate(e)}>
               <Form.Group className="mb-3">
-                <Form.Control type="text" onChange={updateProductOnChange} value={formUpdateProduct.title} placeholder="Name" name="title" className="formInputProduct"/>
+                <Form.Control type="text" onChange={handleChange} value={formUpdateProduct.name} placeholder="Name" name="name" className="formInputProduct"/>
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Control type="text" onChange={updateProductOnChange} value={formUpdateProduct.stock} placeholder="Stock" name="stock" className="formInputProduct"/>
+                <Form.Control type="text" onChange={handleChange} value={formUpdateProduct.stock} placeholder="Stock" name="stock" className="formInputProduct"/>
               </Form.Group>
               <Form.Group className="mb-3" >
-                <Form.Control type="text" onChange={updateProductOnChange} value={formUpdateProduct.price} placeholder="Price" name="price" className="formInputProduct"/>
+                <Form.Control type="text" onChange={handleChange} value={formUpdateProduct.price} placeholder="Price" name="price" className="formInputProduct"/>
               </Form.Group>
               <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                <Form.Control as="textarea" onChange={updateProductOnChange} rows={4} value={formUpdateProduct.description} placeholder="Description Product" name="description" className="formInputTextarea"/>
+                <Form.Control as="textarea" onChange={handleChange} rows={4} value={formUpdateProduct.desc} placeholder="Description Product" name="desc" className="formInputTextarea"/>
               </Form.Group>
               <Form.Group controlId="formFile" className="mb-3 col-6">
-                <Form.Control type="file" onChange={handleImageUpload} name="image" style={{backgroundColor: "#613D2B40", border: "2px solid #613D2B"}} placeholder="Upload"/>
+                <Form.Control type="file" onChange={handleChange} name="photo" style={{backgroundColor: "#613D2B40", border: "2px solid #613D2B"}} placeholder="Upload"/>
               </Form.Group>
               <div className="d-flex justify-content-center" style={{ marginTop: "3rem" }}>
                 <Button variant="secondary col-6" type="submit" style={{ backgroundColor: "#613D2B" }}>
@@ -83,7 +116,7 @@ const ProductUpdate = (props) => {
           </div>
         </Col>
         <Col className="header col-4 d-flex justify-content-end">
-          <img src={imageUrl} alt={Product.title} />
+          <img src={imageUrl} alt="" />
         </Col>
       </Row>
     </Container>

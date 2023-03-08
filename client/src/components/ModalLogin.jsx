@@ -40,7 +40,7 @@ const ModalLogin = (props) => {
         type: 'LOGIN_SUCCESS',
         payload: response.data.data,
       });
-      setAuthToken(localStorage.token);
+      setAuthToken(response.data.data.token);
   
       setFormLogin({
         email: '',
@@ -56,12 +56,10 @@ const ModalLogin = (props) => {
       })
 
       // Status check
-      if (response.data.data.name === 'admin') {
+      if (response.data.data.role === 'admin') {
         navigate('/list-income');
-        setIsAdmin(true)
       } else {
         navigate('/');
-        setIsUser(true)
       }
     } catch (error) {
       Swal.fire({

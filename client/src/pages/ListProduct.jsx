@@ -29,7 +29,8 @@ const ListProduct = () => {
     // If confirm is true, execute delete data
   const deleteById = useMutation(async (id) => {
     try {
-      await API.delete(`/product/${id}`);
+     const response = await API.delete(`/product/${id}`);
+     console.log(response)
       refetch();
       navigate("/list-product")
       Swal.fire({
@@ -65,6 +66,12 @@ const ListProduct = () => {
     }
   }, [confirmDelete]);
 
+  let asceding = []
+  if (products != undefined) {
+    asceding = [...products]
+    asceding.sort((a,b) => b.id - a.id)
+  }
+
 
   return (
     <>
@@ -95,7 +102,7 @@ const ListProduct = () => {
               </tr>
             </thead>
             <tbody>
-              {products?.map((item, index) => {
+              {asceding?.map((item, index) => {
                 return (
                   <tr key={item.id}>
                     <td style={{ verticalAlign: "middle" }}>{index + 1}</td>

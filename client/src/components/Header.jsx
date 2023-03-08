@@ -5,14 +5,14 @@ import { ModalLogin, ModalRegister, UserAdmin, UserCust } from "./Components";
 
 const Header = (props) => {
   const navigate = useNavigate();
-  const { IsAdmin, setIsAdmin, IsUser, setIsUser, cart, Users, SetUsers } = props
+  const { IsLogin, IsAdmin, setIsAdmin, IsUser, setIsUser, cart, Users, SetUsers } = props
   const [showLogin, setModalLogin] = useState(false);
   const [showRegister, setModalRegister] = useState(false);
   return (
     <Navbar className="nav shadow" expand="lg" fixed={"top"}>
       <Container>
         <Navbar.Brand
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/list-income")}
           style={{ cursor: "pointer" }}
         >
           <img src={`img/nav-logo.png`} alt="icon" />
@@ -20,14 +20,12 @@ const Header = (props) => {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll></Nav>
-          {IsAdmin ? (
+          {IsLogin === "admin" ? (
             <>
               <UserAdmin logout={() => [
-                setIsAdmin(false), 
-                setIsUser(false), 
                 navigate("/")]} />
             </>
-          ) : IsUser ? (
+          ) : IsLogin === "user" ? (
             <>
               <UserCust logout={() => [setIsUser(false), navigate("/")]} cart={cart}/>
             </>

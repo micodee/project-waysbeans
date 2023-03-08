@@ -14,6 +14,12 @@ const Home = () => {
     return response.data.data;
   });
 
+  let asceding = []
+  if (products != undefined) {
+    asceding = [...products]
+    asceding.sort((a,b) => b.id - a.id)
+  }
+
   return (
     <Container className="home col-9">
       <Row>
@@ -40,7 +46,7 @@ const Home = () => {
           gap: "2rem",
         }}
       >
-        {products?.map((item) => {
+        {asceding?.map((item) => {
           return (
             <Card
               key={item.id}

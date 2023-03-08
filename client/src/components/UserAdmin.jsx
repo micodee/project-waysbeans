@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Form, Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/contextUser";
+import Swal from 'sweetalert2'
 
-const UserAdmin = (rest) => {
+const UserAdmin = () => {
+  let navigate = useNavigate()
+  const [state, dispatch] = useContext(UserContext)
+
+    const logout = () => {
+        console.log(state)
+        dispatch({
+            type: "LOGOUT"
+        })
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Logout Success',
+          showConfirmButton: false,
+          timer: 1500
+        })
+        navigate("/")
+    }
   return (
     <div>
       <Form className="d-flex align-items-center gap-3">
@@ -34,7 +53,7 @@ const UserAdmin = (rest) => {
               </Link>
             </Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item onClick={rest.logout} className="menu">
+            <Dropdown.Item onClick={logout} className="menu">
               <img src={`img/drop-logout.png`} alt="logout" />
               Logout
             </Dropdown.Item>

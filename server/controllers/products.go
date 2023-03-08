@@ -144,9 +144,6 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 // FUNCTION DELETE PRODUCT
 func (h *productControl) DeleteProduct(c echo.Context) error {
 	// get url param ID
-	// id, _ := strconv.Atoi(c.Param("id"))
-
-	// get url param ID
 	id, _ := strconv.Atoi(c.Param("id"))
 
 	// run REPOSITORY get products
