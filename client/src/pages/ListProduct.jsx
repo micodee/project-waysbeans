@@ -50,6 +50,11 @@ const ListProduct = () => {
       console.log(error);
     }
   });
+
+  const handleUpdate = (id) => {
+    navigate(`/product-update/${id}`);
+  };
+
   useEffect(() => {
     if (confirmDelete) {
       // Close modal confirm delete data
@@ -102,7 +107,7 @@ const ListProduct = () => {
                     <td style={{ verticalAlign: "middle" }}>
                       <div className="d-flex justify-content-evenly align-items-center gap-2">
                       <Button onClick={() => handleDelete(item.id)} variant="danger">Delete</Button>
-                      <Button onClick="" variant="success">Update</Button>
+                      <Button onClick={() => handleUpdate(item.id)} variant="success">Update</Button>
                       </div>
                     </td>
                   </tr>
