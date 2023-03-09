@@ -1,7 +1,8 @@
 import { Container, Row, Col } from "react-bootstrap";
 import data from "../assets/json/transaction.json"
 
-const Transaction = () => {
+const Transaction = (props) => {
+  const { user } = props
   return (
     <Container className="detail col-9">
       <Row className="d-flex justify-content-between">
@@ -27,11 +28,19 @@ const Transaction = () => {
               <p className="mb-1">
                 <b>Full Name</b>
               </p>
-              <span>Marcel Ganteng</span>
-              <p className="mb-1 mt-4">
+              <span>{user.fullname}</span>
+              <p className="mb-1 mt-3">
                 <b>Email</b>
               </p>
-              <span>tommymh21@gmail.com</span>
+              <span>{user.email}</span>
+              <p className="mb-1 mt-3">
+                <b>Phone</b>
+              </p>
+              <span>{user.profile?.phone === "" ? "-" : user.profile?.phone}</span>
+              <p className="mb-1 mt-3">
+                <b>Address</b>
+              </p>
+              <span>{user.profile?.address === "" ? "-" : user.profile?.address }</span>
             </div>
           </div>
         </Col>

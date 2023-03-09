@@ -10,7 +10,7 @@ import { UserContext } from "../context/contextUser";
 const ModalLogin = (props) => {
   let navigate = useNavigate();
 
-  const {showModal, hideModal, toRegister, setIsAdmin, setIsUser} = props
+  const {showModal, hideModal, toRegister} = props
   // agar submit tidak merefresh
 
   const [_, dispatch] = useContext(UserContext);
@@ -58,8 +58,10 @@ const ModalLogin = (props) => {
       // Status check
       if (response.data.data.role === 'admin') {
         navigate('/list-income');
+      } else if (response.data.data.role === 'user') {
+        navigate('/profile');
       } else {
-        navigate('/');
+        navigate('/')
       }
     } catch (error) {
       Swal.fire({

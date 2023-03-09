@@ -137,7 +137,7 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 		fmt.Println("Failed to delete file"+fileName+":", err)
 		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
 	}
-	fmt.Println(fileName + " update successfully")
+	fmt.Println(dataFile + " update successfully")
 
 		product.Photo = dataFile
 

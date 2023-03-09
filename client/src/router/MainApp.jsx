@@ -68,13 +68,14 @@ const MainApp = () => {
   return (
     <>
         <Header IsUser={state.user.role} IsLogin={state.user.role} cart={cart} Users={Users} SetUsers={SetUsers} />
+        {isLoading ? null :
         <Routes>
           <Route path="/"  element={<Home />} />
           <Route path="/detail/:id" element={<ProductDetail IsUser={state.user.role} />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
             <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} cart={cart} setCart={setCart} />} />
-            <Route path="/profile" element={<Transaction Transactions={Transactions} />} />
+            <Route path="/profile" element={<Transaction Transactions={Transactions} user={state.user} />} />
           </Route>
 
           <Route path="/" element={<RouteAdmin IsAdmin={state.user.role}/>}>
@@ -84,6 +85,7 @@ const MainApp = () => {
             <Route path="/list-income" element={<ListIncome />} />
           </Route>
         </Routes>
+}
         <Footer />
     </>
   );
