@@ -60,6 +60,7 @@ const ModalLogin = (props) => {
         navigate('/list-income');
       } else if (response.data.data.role === 'user') {
         navigate('/profile');
+        window.location.reload();
       } else {
         navigate('/')
       }

@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { API } from "../config/api";
 
 const ProductDetail = (props) => {
-  const { IsUser } = props
+  const { IsLogin } = props
   const navigate = useNavigate()
   
       // Fetching product data from database
@@ -19,7 +19,7 @@ const ProductDetail = (props) => {
   Product = Product[0];
 
   const addCart = () => {
-    if (IsUser) {
+    if (IsLogin) {
       navigate('/')
     } else {
       alert("harus login")

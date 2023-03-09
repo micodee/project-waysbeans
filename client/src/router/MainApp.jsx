@@ -3,7 +3,6 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components/Components";
 import { Cart, Home, ListIncome, ListProduct, ProductAdd, ProductDetail, ProductUpdate, Transaction } from "../pages/Pages";
 import dataTransaction from "../assets/json/transaction.json"
-import dataUsers from "../assets/json/users.json"
 import RouteAdmin from "./RouteAdmin";
 import RouteUser from "./RouteUser";
 import { API, setAuthToken } from '../config/api';
@@ -59,7 +58,6 @@ const MainApp = () => {
 
   //state global product
   const [Transactions, SetTransactions] = useState(dataTransaction)
-  const [Users, SetUsers] = useState(dataUsers)
 
   //tampung for chart
   const [cart, setCart] = useState(0)
@@ -67,11 +65,11 @@ const MainApp = () => {
 
   return (
     <>
-        <Header IsUser={state.user.role} IsLogin={state.user.role} cart={cart} Users={Users} SetUsers={SetUsers} />
+        <Header IsLogin={state.user.role} cart={cart} />
         {isLoading ? null :
         <Routes>
           <Route path="/"  element={<Home />} />
-          <Route path="/detail/:id" element={<ProductDetail IsUser={state.user.role} />} />
+          <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
             <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} cart={cart} setCart={setCart} />} />

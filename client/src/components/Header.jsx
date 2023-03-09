@@ -5,7 +5,7 @@ import { ModalLogin, ModalRegister, UserAdmin, UserCust } from "./Components";
 
 const Header = (props) => {
   const navigate = useNavigate();
-  const { IsLogin, IsAdmin, setIsAdmin, IsUser, setIsUser, cart, Users, SetUsers } = props
+  const { IsLogin, cart } = props
   const [showLogin, setModalLogin] = useState(false);
   const [showRegister, setModalRegister] = useState(false);
   return (
@@ -22,12 +22,11 @@ const Header = (props) => {
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: "100px" }} navbarScroll></Nav>
           {IsLogin === "admin" ? (
             <>
-              <UserAdmin logout={() => [
-                navigate("/")]} />
+              <UserAdmin />
             </>
           ) : IsLogin === "user" ? (
             <>
-              <UserCust logout={() => [setIsUser(false), navigate("/")]} cart={cart}/>
+              <UserCust cart={cart}/>
             </>
           ) : (
             <>
@@ -51,22 +50,12 @@ const Header = (props) => {
         showModal={showLogin}
         hideModal={() => setModalLogin(false)}
         toRegister={() => [setModalLogin(false), setModalRegister(true)]}
-        setIsAdmin={setIsAdmin}
-        IsAdmin={IsAdmin}
-        IsUser={IsUser}
-        setIsUser={setIsUser}
-        linkToUser={() => navigate("/profile")}
-        linkToAdmin={() => navigate("/list-income")}
-        Users={Users}
-        SetUsers={SetUsers}
       />
 
       <ModalRegister
         showModal={showRegister}
         hideModal={() => setModalRegister(false)}
         toLogin={() => [setModalRegister(false), setModalLogin(true)]}
-        Users={Users}
-        SetUsers={SetUsers}
       />
     </Navbar>
   );
