@@ -3,6 +3,7 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { API } from "../config/api";
 import { useMutation } from "react-query";
+import Swal from 'sweetalert2'
 
 
 const ProductUpdate = () => {
@@ -79,6 +80,13 @@ const ProductUpdate = () => {
       console.log(response.data);
 
       navigate('/list-product');
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Update Product Success',
+        showConfirmButton: false,
+        timer: 1500
+      })
     } catch (error) {
       console.log(error);
     }

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Form, Dropdown, Badge } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/contextUser";
+import Swal from 'sweetalert2'
 
 const UserCust = (rest) => {
   const { cart } = rest
@@ -15,6 +16,13 @@ const UserCust = (rest) => {
             type: "LOGOUT"
         })
         navigate("/")
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Logout Success',
+          showConfirmButton: false,
+          timer: 1500
+        })
     }
   return (
     <div>
