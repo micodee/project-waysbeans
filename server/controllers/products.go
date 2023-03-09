@@ -51,7 +51,7 @@ func (h *productControl) GetProducts(c echo.Context) error {
 func (h *productControl) CreateProduct(c echo.Context) error {
 	// get file IMAGE
 	dataFile := c.Get("dataFile").(string)
-	fmt.Println(dataFile, "uploads successfully")
+	fmt.Println(dataFile, "upload successfully")
 
 	// convert request STRING TO INT
 	price, _ := strconv.Atoi(c.FormValue("price"))
