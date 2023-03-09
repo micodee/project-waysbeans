@@ -61,7 +61,7 @@ const ProductAdd = () => {
       const response = await API.post('/product', formData, config);
       console.log("add product success : ", response);
 
-      navigate('/');
+      navigate('/list-product');
       Swal.fire({
         position: 'center',
         icon: 'success',
