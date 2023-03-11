@@ -3,8 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useQuery } from "react-query";
 import { API } from "../config/api";
+import ModalLogin from "../components/ModalLogin";
+import { useState } from "react";
+import ModalRegister from "../components/ModalRegister";
 
 const ProductDetail = (props) => {
+  const [showLogin, setModalLogin] = useState(false);
+  const [showRegister, setModalRegister] = useState(false)
+
   const { IsLogin } = props
   const navigate = useNavigate()
   
@@ -19,10 +25,10 @@ const ProductDetail = (props) => {
   Product = Product[0];
 
   const addCart = () => {
-    if (IsLogin) {
-      navigate('/')
+    if (IsLogin != null) {
+      navigate('/cart')
     } else {
-      alert("harus login")
+      setModalLogin(true)
     }
   }
 
@@ -46,6 +52,16 @@ const ProductDetail = (props) => {
        </div>
      </Col>
    </Row>
+   <ModalLogin
+        showModal={showLogin}
+        hideModal={() => setModalLogin(false)}
+        toRegister={() => [setModalLogin(false), setModalRegister(true)]}
+      />
+      <ModalRegister
+        showModal={showRegister}
+        hideModal={() => setModalRegister(false)}
+        toLogin={() => [setModalRegister(false), setModalLogin(true)]}
+      />
    </Container>
   )
 }

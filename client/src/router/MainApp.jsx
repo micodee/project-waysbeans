@@ -59,20 +59,18 @@ const MainApp = () => {
   //state global product
   const [Transactions, SetTransactions] = useState(dataTransaction)
 
-  //tampung for chart
-  const [cart, setCart] = useState(0)
 
 
   return (
     <>
-        <Header IsLogin={state.user.role} cart={cart} />
+        <Header IsLogin={state.user.role} />
         {isLoading ? null :
         <Routes>
           <Route path="/"  element={<Home />} />
           <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
-            <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} cart={cart} setCart={setCart} />} />
+            <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} />} />
             <Route path="/profile" element={<Transaction Transactions={Transactions} user={state.user} />} />
           </Route>
 

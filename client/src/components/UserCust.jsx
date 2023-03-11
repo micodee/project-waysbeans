@@ -4,9 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/contextUser";
 import Swal from 'sweetalert2'
 
-const UserCust = (rest) => {
-  const { cart } = rest
-
+const UserCust = () => {
   let navigate = useNavigate()
   const [state, dispatch] = useContext(UserContext)
 
@@ -38,7 +36,7 @@ const UserCust = (rest) => {
             bg="danger"
             style={{ position: "absolute", top: 0, right: "-.5rem" }}
           >
-            {cart}
+            1
           </Badge>
         </Link>
         <Dropdown className="dropdown">

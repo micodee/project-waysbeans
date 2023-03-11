@@ -15,12 +15,13 @@ import (
 
 // SETUP CONTROL STRUCT
 type cartControl struct {
-	CartRepository repositories.CartRepository
+	CartRepository    repositories.CartRepository
+	ProductRepository repositories.ProductRepository
 }
 
 // SETUP CONTROL FUNCTION
-func ControlCart(CartRepository repositories.CartRepository) *cartControl {
-	return &cartControl{CartRepository}
+func ControlCart(CartRepository repositories.CartRepository, ProductRepository repositories.ProductRepository) *cartControl {
+	return &cartControl{CartRepository, ProductRepository}
 }
 
 // FUNCTION FIND CARTS
@@ -62,17 +63,24 @@ func (h *cartControl) CreateCart(c echo.Context) error {
 	userId := userLogin.(jwt.MapClaims)["id"].(float64)
 	productId, _ := strconv.Atoi(c.Param("product_id"))
 
+	// get price from Product by ID
+	product, err := h.ProductRepository.GetProducts(productId)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
+	}
+	price := product.Price
+
 	cart := models.Cart{
 		ProductID: productId,
 		OrderQty:  request.OrderQty,
 		UserID:    int(userId),
+		Subtotal:  request.OrderQty * price,
 	}
 
-	data, err := h.CartRepository.CreateCart(cart)
+	data, err := h.CartRepository.CreateCart(cart, productId)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
 	}
-
 	return c.JSON(http.StatusOK, result.SuccessResult{Status: http.StatusOK, Data: convCart(data)})
 }
 
@@ -81,5 +89,6 @@ func convCart(u models.Cart) dto.CartResponse {
 		ProductID: u.ProductID,
 		OrderQty:  u.OrderQty,
 		UserID:    u.UserID,
+		Subtotal:  u.Subtotal,
 	}
 }

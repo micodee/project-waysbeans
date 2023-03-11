@@ -17,8 +17,8 @@ type User struct {
 
 // Associated with (Profile, Cart, Transaction)
 type UsersRelation struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
 }
 
 func (UsersRelation) TableName() string {

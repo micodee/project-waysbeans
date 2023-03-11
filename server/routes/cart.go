@@ -11,9 +11,10 @@ import (
 
 func CartRoutes(e *echo.Group) {
 	cartRepository := repositories.RepositoryCart(mysql.ConnDB)
-	h := controllers.ControlCart(cartRepository)
+	productRepository := repositories.RepositoryProduct(mysql.ConnDB)
+	h := controllers.ControlCart(cartRepository, productRepository)
 
 	e.GET("/cart", h.FindCarts)
 	e.GET("/cart/:id", h.GetCart)
-	e.POST("/cart/:product_id", middleware.Auth(h.CreateCart))
+	e.PATCH("/cart/:product_id", middleware.Auth(h.CreateCart))
 }

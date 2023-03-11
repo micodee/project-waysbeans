@@ -5,7 +5,7 @@ import { ModalLogin, ModalRegister, UserAdmin, UserCust } from "./Components";
 
 const Header = (props) => {
   const navigate = useNavigate();
-  const { IsLogin, cart } = props
+  const { IsLogin } = props
   const [showLogin, setModalLogin] = useState(false);
   const [showRegister, setModalRegister] = useState(false);
   return (
@@ -26,7 +26,7 @@ const Header = (props) => {
             </>
           ) : IsLogin === "user" ? (
             <>
-              <UserCust cart={cart}/>
+              <UserCust/>
             </>
           ) : (
             <>
