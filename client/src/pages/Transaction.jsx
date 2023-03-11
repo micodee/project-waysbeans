@@ -1,9 +1,13 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import data from "../assets/json/transaction.json"
+import ModalEditProfile from "../components/ModalEditProfile";
 
 const Transaction = (props) => {
   const { user } = props
+  const [showEdit, setModalEdit] = useState(false);
   return (
+    <>
     <Container className="detail col-9">
       <Row className="d-flex justify-content-between">
         <Col className="header col-6">
@@ -22,7 +26,7 @@ const Transaction = (props) => {
             <img
               src={`/img/profile.png`}
               alt="profle"
-              style={{ width: "180px", marginRight: "1.5rem" }}
+              style={{ width: "180px", marginRight: "1.5rem", height: "250px", objectFit: "cover" }}
             />
             <div>
               <p className="mb-1">
@@ -40,7 +44,8 @@ const Transaction = (props) => {
               <p className="mb-1 mt-3">
                 <b>Address</b>
               </p>
-              <span>{user.profile?.address === "" ? "-" : user.profile?.address }</span>
+              <span className="profileAddress">{user.profile?.address === "" ? "-" : user.profile?.address }</span>
+              <Button className="profileBtn" onClick={() => setModalEdit(true)}>Edit Profile</Button>
             </div>
           </div>
         </Col>
@@ -108,6 +113,11 @@ const Transaction = (props) => {
         </Col>
       </Row>
     </Container>
+      <ModalEditProfile 
+      showEdit={showEdit}
+      hideEdit={setModalEdit}
+      />
+      </>
   );
 };
 

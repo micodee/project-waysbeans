@@ -6,6 +6,7 @@ import { API } from "../config/api";
 import ModalLogin from "../components/ModalLogin";
 import { useState } from "react";
 import ModalRegister from "../components/ModalRegister";
+import Swal from "sweetalert2";
 
 const ProductDetail = (props) => {
   const [showLogin, setModalLogin] = useState(false);
@@ -27,6 +28,13 @@ const ProductDetail = (props) => {
   const addCart = () => {
     if (IsLogin != null) {
       navigate('/cart')
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Add Success',
+        showConfirmButton: false,
+        timer: 1500
+      })
     } else {
       setModalLogin(true)
     }
@@ -36,19 +44,19 @@ const ProductDetail = (props) => {
    <Container className="detail col-9">
    <Row className="d-flex justify-content-between">
      <Col className="header col-4">
-       <img src={`http://localhost:5001/uploads/${Product.photo}`} alt={Product.name} style={{ width: "100%", height: "520px", objectFit: "cover" }}/>
+       <img src={`http://localhost:5001/uploads/${Product.photo}`} alt={Product.name} className="detailImg"/>
      </Col>
      <Col className="header col-7 d-flex justify-content-center align-items-center">
        <div className="col-10">
-         <h3 className="mt-2 mb-0" style={{ fontWeight: "900", fontSize: "48px", color: "#613D2B" }}>{Product.name}</h3>
-         <p className="mt-0 mb-5" style={{ color: "#974A4A" }}>
+         <h3 className="mt-2 mb-0 detailName">{Product.name}</h3>
+         <p className="mt-0 mb-5 detailStock">
            Stock : {Product.stock}
          </p>
-         <p style={{ textAlign: "justify" }}>
+         <p className="detaildesc">
          {Product.description}
          </p>
-         <p style={{ textAlign: "right", fontWeight: "900", fontSize: "24px", color: "#974A4A", marginBottom: "3rem", marginTop: "2rem" }}>Rp.{Product.price}</p>
-         <Button onClick={addCart} className="col-12" style={{ backgroundColor: "#613D2B", color: "#fff", border: "none" }}>Add Cart</Button>{' '}
+         <p className="detailprice">Rp.{Product.price}</p>
+         <Button onClick={addCart} className="col-12 detailBtnAdd">Add Cart</Button>{' '}
        </div>
      </Col>
    </Row>
