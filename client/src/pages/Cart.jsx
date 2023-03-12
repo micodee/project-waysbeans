@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import ProductCart from "../components/ProductCart";
+import { useQuery } from "react-query";
+import { API } from "../config/api";
 
 const Cart = (props) => {
   const { Products, SetProducts, cart, setCart } = props
@@ -19,6 +21,11 @@ const Cart = (props) => {
     SetProducts(newData);
   };
 
+  let { data: carts } = useQuery("cartCache", async () => {
+    const response = await API.get("/cart");
+    return response.data.data;
+  });
+
   return (
     <Container className="detail col-9">
       <Row className="d-flex justify-content-between">
@@ -36,11 +43,11 @@ const Cart = (props) => {
         <p className="m-0 p-0">Review Your Order</p>
         <Col className="header col-7 d-flex justify-content-center">
           <div className="col-12">
-            {Products?.map((item) => {
+            {carts?.filter(e => e.user_id === props.user.id).map((item) => {
               return (
                 <ProductCart
-                  key={item.id}
-                  product={item}
+                  item={item}
+                  product={item.product}
                   handleQty={handleQty}
                   handleTotal={handleTotal}
                   handleRemove={handleRemove}

@@ -70,7 +70,7 @@ const MainApp = () => {
           <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} user={state.user} />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
-            <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} />} />
+            <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} user={state.user} />} />
             <Route path="/profile" element={<Transaction Transactions={Transactions} user={state.user} />} />
           </Route>
 

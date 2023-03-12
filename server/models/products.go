@@ -31,6 +31,7 @@ type ProductToCart struct {
 	Name  string `json:"name"`
 	Price int    `json:"price"`
 	Stock int    `json:"stock"`
+	Photo string `json:"photo"`
 }
 
 func (ProductToUser) TableName() string {

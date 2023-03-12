@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const ProductCart = (props) => {
   const { handleQty, handleTotal, handleRemove } = props;
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(props.item.order_qty);
 
   const handleAdd = () => {
     setCount(count + 1);
@@ -19,20 +19,21 @@ const ProductCart = (props) => {
   const handleDelete = () => {
     handleRemove(props.product.id);
   };
+
   return (
     <div>
       <hr style={{ height: "2px", backgroundColor: "black" }} />
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex gap-3 align-items-center">
           <img
-            src={props.product.image}
+            src={`http://localhost:5001/uploads/${props.product.photo}`}
             alt="product"
             height={80}
             style={{ width: "80px" }}
           />
           <div>
             <h6 style={{ fontWeight: "900", color: "#613D2B" }}>
-              {props.product.title}
+              {props.product.name}
             </h6>
             <div className="d-flex align-items-center gap-2">
               <span className="lessQty" onClick={handleLess}></span>
