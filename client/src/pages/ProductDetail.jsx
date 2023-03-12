@@ -42,7 +42,6 @@ const ProductDetail = (props) => {
   
         const body = JSON.stringify(data);
   
-        console.log(body);
         const response = await API.patch(`/cart/${Product.id}`, body, config);
         console.log("transaction success :", response)
 
