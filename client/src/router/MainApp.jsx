@@ -67,7 +67,7 @@ const MainApp = () => {
         {isLoading ? null :
         <Routes>
           <Route path="/"  element={<Home />} />
-          <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} />} />
+          <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} user={state.user} />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
             <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} />} />

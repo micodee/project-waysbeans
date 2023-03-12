@@ -1,18 +1,18 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
 import ModalLogin from "../components/ModalLogin";
-import { useState } from "react";
 import ModalRegister from "../components/ModalRegister";
+import { useState } from "react";
 import Swal from "sweetalert2";
 
 const ProductDetail = (props) => {
   const [showLogin, setModalLogin] = useState(false);
   const [showRegister, setModalRegister] = useState(false)
 
-  const { IsLogin } = props
+  const { IsLogin, user } = props
   const navigate = useNavigate()
   
       // Fetching product data from database
@@ -25,20 +25,49 @@ const ProductDetail = (props) => {
   let Product = products.filter(Product => Product.id === parseInt(params.id));
   Product = Product[0];
 
-  const addCart = () => {
-    if (IsLogin != null) {
-      navigate('/cart')
+  const addCart = useMutation (async (e) => {
+    try {
+      e.preventDefault();
+      if (IsLogin != null) {
+        const config = {
+          headers: {
+            'Content-type': 'application/json',
+          },
+        };
+  
+        const data = {
+          user_id: user.id,
+          order_quantity: +1
+        };
+  
+        const body = JSON.stringify(data);
+  
+        console.log(body);
+        const response = await API.patch(`/cart/${Product.id}`, body, config);
+        console.log("transaction success :", response)
+
+        navigate('/cart')
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Add Success',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      } else {
+        setModalLogin(true)
+      }
+    } catch {
       Swal.fire({
         position: 'center',
-        icon: 'success',
-        title: 'Add Success',
+        icon: 'failed',
+        title: 'Failed',
         showConfirmButton: false,
         timer: 1500
       })
-    } else {
-      setModalLogin(true)
     }
-  }
+  })
+  
 
   return (
    <Container className="detail col-9">
@@ -56,7 +85,7 @@ const ProductDetail = (props) => {
          {Product.description}
          </p>
          <p className="detailprice">Rp.{Product.price}</p>
-         <Button onClick={addCart} className="col-12 detailBtnAdd">Add Cart</Button>{' '}
+         <Button onClick={(e) => addCart.mutate(e)} className="col-12 detailBtnAdd">Add Cart</Button>{' '}
        </div>
      </Col>
    </Row>

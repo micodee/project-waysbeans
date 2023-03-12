@@ -76,7 +76,7 @@ const Cart = (props) => {
                 variant="secondary col-6"
                 style={{ backgroundColor: "#613D2B" }}
               >
-                Pay
+                Buy
               </Button>
             </div>
           </div>
