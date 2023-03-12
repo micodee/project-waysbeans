@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const ProductCart = (props) => {
-  const { handleQty, handleTotal, handleRemove } = props;
+  const { handleQty, handleTotal } = props;
   const [count, setCount] = useState(props.item.order_qty);
 
   const handleAdd = () => {
@@ -14,10 +14,6 @@ const ProductCart = (props) => {
     if (count === 0) return;
     setCount(count - 1);
     handleQty(-1);
-  };
-
-  const handleDelete = () => {
-    handleRemove(props.product.id);
   };
 
   return (
@@ -58,7 +54,7 @@ const ProductCart = (props) => {
               alt="crash"
               height={20}
               style={{ width: "17px", cursor: "pointer" }}
-              onClick={handleDelete}
+              onClick={props.delete}
             />
           </div>
         </div>

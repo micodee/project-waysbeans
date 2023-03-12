@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import ProductCart from "../components/ProductCart";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import { API } from "../config/api";
+import Swal from "sweetalert2";
 
 const Cart = (props) => {
-  const { Products, SetProducts, cart, setCart } = props
+  const { cart, setCart } = props;
 
   const handleQty = (count) => {
     setCart(cart + count);
@@ -16,15 +17,29 @@ const Cart = (props) => {
     setTotal(total + count * price);
   };
 
-  const handleRemove = (id) => {
-    const newData = Products.filter((item) => item.id !== id);
-    SetProducts(newData);
-  };
-
-  let { data: carts } = useQuery("cartCache", async () => {
+  let { data: carts, refetch } = useQuery("cartCache", async () => {
     const response = await API.get("/cart");
     return response.data.data;
   });
+  // If confirm is true, execute delete data
+  const deleteById = useMutation(async (id) => {
+    try {
+      const response = await API.delete(`/cart/${id}`);
+      console.log(response);
+      refetch();
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Delete Failed",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(error);
+    }
+  });
+
+  console.log(deleteById);
 
   return (
     <Container className="detail col-9">
@@ -43,17 +58,19 @@ const Cart = (props) => {
         <p className="m-0 p-0">Review Your Order</p>
         <Col className="header col-7 d-flex justify-content-center">
           <div className="col-12">
-            {carts?.filter(e => e.user_id === props.user.id).map((item) => {
-              return (
-                <ProductCart
-                  item={item}
-                  product={item.product}
-                  handleQty={handleQty}
-                  handleTotal={handleTotal}
-                  handleRemove={handleRemove}
-                />
-              );
-            })}
+            {carts
+              ?.filter((e) => e.user_id === props.user.id)
+              .map((item) => {
+                return (
+                  <ProductCart
+                    item={item}
+                    product={item.product}
+                    handleQty={handleQty}
+                    handleTotal={handleTotal}
+                    delete={() => deleteById.mutate(item.id)}
+                  />
+                );
+              })}
 
             <hr style={{ height: "2px", backgroundColor: "black" }} />
           </div>

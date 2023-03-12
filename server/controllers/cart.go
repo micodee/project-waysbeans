@@ -84,6 +84,21 @@ func (h *cartControl) CreateCart(c echo.Context) error {
 	return c.JSON(http.StatusOK, result.SuccessResult{Status: http.StatusOK, Data: convCart(data)})
 }
 
+func (h *cartControl) DeleteCart(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	cart, err := h.CartRepository.GetCart(id)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, result.ErrorResult{Status: http.StatusBadRequest, Message: err.Error()})
+	}
+
+	data, err := h.CartRepository.DeleteCart(cart, id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
+	}
+	return c.JSON(http.StatusOK, result.SuccessResult{Status: http.StatusOK, Data: convCart(data)})
+}
+
 func convCart(u models.Cart) dto.CartResponse {
 	return dto.CartResponse{
 		ProductID: u.ProductID,
