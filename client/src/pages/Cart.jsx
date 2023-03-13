@@ -39,7 +39,11 @@ const Cart = (props) => {
     }
   });
 
-  console.log(deleteById);
+  let asceding = []
+  if (carts != null) {
+    asceding = [...carts]
+    asceding.sort((a,b) => b.id - a.id)
+  }
 
   return (
     <Container className="detail col-9">
@@ -58,7 +62,7 @@ const Cart = (props) => {
         <p className="m-0 p-0">Review Your Order</p>
         <Col className="header col-7 d-flex justify-content-center">
           <div className="col-12">
-            {carts
+            {asceding
               ?.filter((e) => e.user_id === props.user.id)
               .map((item) => {
                 return (
