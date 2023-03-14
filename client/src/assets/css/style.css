@@ -216,3 +216,8 @@
   background-color: #613d2b;
   border: none;
 }
+
+.custom-text-primary {
+  color: #613D2B !important;
+  font-size: 24px;
+}

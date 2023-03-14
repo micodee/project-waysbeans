@@ -98,9 +98,14 @@ const ModalBuy = (props) => {
             <Form.Group className="mb-3">
               <Form.Control type="text" placeholder="Phone" name="phone" className="formInput" value={formLogin.phone} onChange={ChangeLogin} />
             </Form.Group>
-            <Form.Group className="mb-4">
+            <Form.Group className="mb-3">
               <Form.Control type="text" placeholder="Address" name="address" className="formInput" value={formLogin.address} onChange={ChangeLogin} />
             </Form.Group>
+            <Form.Text className="custom-text-primary fw-bold d-block my-2 mb-4">
+              Qty : {props.qty}
+              <br/>
+              Total : Rp{props.total}
+            </Form.Text>
             <Button variant="secondary col-12" type="submit" style={{ backgroundColor: "#613D2B" }}>
               {SubmitLogin.isLoading ? "isloading..." : "pay"}
             </Button>

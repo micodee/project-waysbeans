@@ -14,11 +14,6 @@ const Cart = (props) => {
     setCart(cart + count);
   };
 
-  const [total, setTotal] = useState(0);
-  const handleTotal = (count, price) => {
-    setTotal(total + count * price);
-  };
-
   let { data: carts, refetch } = useQuery("cartCache", async () => {
     const response = await API.get("/cart");
     return response.data.data;
@@ -73,7 +68,6 @@ const Cart = (props) => {
                       item={item}
                       product={item.product}
                       handleQty={handleQty}
-                      handleTotal={handleTotal}
                       delete={() => deleteById.mutate(item.id)}
                     />
                   );
@@ -101,7 +95,7 @@ const Cart = (props) => {
                     <b>Total</b>
                   </p>
                   <p>
-                    <b>{asceding.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0)}</b>
+                    <b>Rp.{asceding.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0)}</b>
                   </p>
                 </div>
                 <div className="d-flex justify-content-end mt-4">
@@ -118,7 +112,12 @@ const Cart = (props) => {
           </Col>
         </Row>
       </Container>
-      <ModalBuy showbuy={showbuy} hideEdit={setModalBuy} />
+      <ModalBuy 
+      showbuy={showbuy} 
+      hideEdit={setModalBuy} 
+      total={asceding.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0)}
+      qty={asceding?.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentValue) => accumulator + currentValue.order_qty, 0)}
+      />
     </>
   );
 };
