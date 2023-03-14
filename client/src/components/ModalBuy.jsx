@@ -84,7 +84,7 @@ const ModalBuy = (props) => {
       <Modal show={showbuy} onHide={hideEdit} centered size="md">
         <Modal.Header closeButton>
           <Modal.Title style={{ color: "#613D2B", fontWeight: "900" }}>
-            Form Data Buy
+            Payment Information
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

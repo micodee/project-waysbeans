@@ -7,6 +7,7 @@ import RouteAdmin from "./RouteAdmin";
 import RouteUser from "./RouteUser";
 import { API, setAuthToken } from '../config/api';
 import { UserContext } from "../context/contextUser";
+import { useQuery } from "react-query";
 
 const MainApp = () => {
   // layar putih
@@ -14,6 +15,7 @@ const MainApp = () => {
   const [state, dispatch] = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true)
 
+  console.log(state);
   useEffect(() => {
     // Redirect Auth but just when isLoading is false
     if (!isLoading) {
@@ -59,6 +61,18 @@ const MainApp = () => {
   //state global product
   const [Transactions, SetTransactions] = useState(dataTransaction)
 
+  const [ProductsList, SetProductsList] = useState([]);
+
+    useQuery('productsCache', async () => {
+      try {
+        const response = await API.get('/products');
+        SetProductsList(response.data.data);
+      }
+      catch (error) {
+        return
+      }
+    });
+
 
 
   return (
@@ -67,10 +81,10 @@ const MainApp = () => {
         {isLoading ? null :
         <Routes>
           <Route path="/"  element={<Home />} />
-          <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} user={state.user} />} />
+          <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} user={state.user}  />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
-            <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} user={state.user} />} />
+            <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} user={state.user} Products={ProductsList}  />} />
             <Route path="/profile" element={<Transaction Transactions={Transactions} user={state.user} />} />
           </Route>
 
