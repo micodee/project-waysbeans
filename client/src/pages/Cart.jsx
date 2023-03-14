@@ -4,9 +4,11 @@ import ProductCart from "../components/ProductCart";
 import { useQuery, useMutation } from "react-query";
 import { API } from "../config/api";
 import Swal from "sweetalert2";
+import ModalBuy from "../components/ModalBuy";
 
 const Cart = (props) => {
   const { cart, setCart } = props;
+  const [showbuy, setModalBuy] = useState(false);
 
   const handleQty = (count) => {
     setCart(cart + count);
@@ -46,6 +48,7 @@ const Cart = (props) => {
   }
 
   return (
+    <>
     <Container className="detail col-9">
       <Row className="d-flex justify-content-between">
         <h2
@@ -103,6 +106,7 @@ const Cart = (props) => {
               <Button
                 variant="secondary col-6"
                 style={{ backgroundColor: "#613D2B" }}
+                onClick={() => setModalBuy(true)}
               >
                 Buy
               </Button>
@@ -111,6 +115,11 @@ const Cart = (props) => {
         </Col>
       </Row>
     </Container>
+    <ModalBuy 
+      showbuy={showbuy}
+      hideEdit={setModalBuy}
+      />
+    </>
   );
 };
 
