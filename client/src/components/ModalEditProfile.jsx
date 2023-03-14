@@ -7,18 +7,21 @@ import { API, setAuthToken } from "../config/api";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/contextUser";
 
-const ModalLogin = (props) => {
+const ModalEditProfile = (props) => {
   let navigate = useNavigate();
 
-  const {showModal, hideModal, toRegister} = props
+  const {showEdit, hideEdit} = props
   // agar submit tidak merefresh
 
   const [_, dispatch] = useContext(UserContext);
   console.log(_);
 
   const [formLogin, setFormLogin] = useState({
+    name: "",
     email: "",
-    password: ""
+    password: "",
+    phone : "",
+    address : "",
   });
   const ChangeLogin = (e) => {
     setFormLogin({
@@ -46,7 +49,7 @@ const ModalLogin = (props) => {
         email: '',
         password: '',
       });
-      hideModal()
+      hideEdit()
       Swal.fire({
         position: 'center',
         icon: 'success',
@@ -78,34 +81,34 @@ const ModalLogin = (props) => {
 
   return (
     <div>
-      <Modal show={showModal} onHide={hideModal} centered size="sm">
+      <Modal show={showEdit} onHide={hideEdit} centered size="md">
         <Modal.Header closeButton>
           <Modal.Title style={{ color: "#613D2B", fontWeight: "900" }}>
-            Login
+            Edit Profile
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={(e) => SubmitLogin.mutate(e)}>
             <Form.Group className="mb-3">
+              <Form.Control type="text" placeholder="Full Name" name="name" className="formInput" value={formLogin.name} onChange={ChangeLogin} />
+            </Form.Group>
+            <Form.Group className="mb-3">
               <Form.Control type="email" placeholder="Email" name="email" className="formInput" value={formLogin.email} onChange={ChangeLogin} />
             </Form.Group>
-            <Form.Group className="mb-4">
+            <Form.Group className="mb-3">
               <Form.Control type="password" placeholder="Password" name="password" className="formInput" value={formLogin.password} onChange={ChangeLogin} />
             </Form.Group>
-            <Button variant="secondary col-12 mb-3" type="submit" style={{ backgroundColor: "#613D2B" }}>
-              Login
+            <Form.Group className="mb-3">
+              <Form.Control type="text" placeholder="Phone" name="phone" className="formInput" value={formLogin.phone} onChange={ChangeLogin} />
+            </Form.Group>
+            <Form.Group className="mb-4">
+              <Form.Control type="text" placeholder="Address" name="address" className="formInput" value={formLogin.address} onChange={ChangeLogin} />
+            </Form.Group>
+            <Button variant="secondary col-12" type="submit" style={{ backgroundColor: "#613D2B" }}>
+              Save Change
             </Button>
               <p style={{ color: "red", textAlign: "center" }}>
               </p>
-            <p style={{ textAlign: "center", fontSize: ".9rem" }}>
-              Don't have an account ?{" "}
-              <span
-                onClick={toRegister}
-                style={{ cursor: "pointer" }}
-              >
-                Klik <b>Here</b>
-              </span>
-            </p>
           </Form>
         </Modal.Body>
       </Modal>
@@ -113,4 +116,4 @@ const ModalLogin = (props) => {
   );
 };
 
-export default ModalLogin;
+export default ModalEditProfile;

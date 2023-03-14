@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import ProductCart from "../components/ProductCart";
+import { useQuery, useMutation } from "react-query";
+import { API } from "../config/api";
+import Swal from "sweetalert2";
+import ModalBuy from "../components/ModalBuy";
 
 const Cart = (props) => {
-  const { Products, SetProducts, cart, setCart } = props
+  const { cart, setCart } = props;
+  const [showbuy, setModalBuy] = useState(false);
 
   const handleQty = (count) => {
     setCart(cart + count);
@@ -14,12 +19,36 @@ const Cart = (props) => {
     setTotal(total + count * price);
   };
 
-  const handleRemove = (id) => {
-    const newData = Products.filter((item) => item.id !== id);
-    SetProducts(newData);
-  };
+  let { data: carts, refetch } = useQuery("cartCache", async () => {
+    const response = await API.get("/cart");
+    return response.data.data;
+  });
+  // If confirm is true, execute delete data
+  const deleteById = useMutation(async (id) => {
+    try {
+      const response = await API.delete(`/cart/${id}`);
+      console.log(response);
+      refetch();
+    } catch (error) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Delete Failed",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(error);
+    }
+  });
+
+  let asceding = []
+  if (carts != null) {
+    asceding = [...carts]
+    asceding.sort((a,b) => b.id - a.id)
+  }
 
   return (
+    <>
     <Container className="detail col-9">
       <Row className="d-flex justify-content-between">
         <h2
@@ -36,17 +65,19 @@ const Cart = (props) => {
         <p className="m-0 p-0">Review Your Order</p>
         <Col className="header col-7 d-flex justify-content-center">
           <div className="col-12">
-            {Products.map((item) => {
-              return (
-                <ProductCart
-                  key={item.id}
-                  product={item}
-                  handleQty={handleQty}
-                  handleTotal={handleTotal}
-                  handleRemove={handleRemove}
-                />
-              );
-            })}
+            {asceding
+              ?.filter((e) => e.user_id === props.user.id)
+              .map((item) => {
+                return (
+                  <ProductCart
+                    item={item}
+                    product={item.product}
+                    handleQty={handleQty}
+                    handleTotal={handleTotal}
+                    delete={() => deleteById.mutate(item.id)}
+                  />
+                );
+              })}
 
             <hr style={{ height: "2px", backgroundColor: "black" }} />
           </div>
@@ -75,14 +106,20 @@ const Cart = (props) => {
               <Button
                 variant="secondary col-6"
                 style={{ backgroundColor: "#613D2B" }}
+                onClick={() => setModalBuy(true)}
               >
-                Pay
+                Buy
               </Button>
             </div>
           </div>
         </Col>
       </Row>
     </Container>
+    <ModalBuy 
+      showbuy={showbuy}
+      hideEdit={setModalBuy}
+      />
+    </>
   );
 };
 

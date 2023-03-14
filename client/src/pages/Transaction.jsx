@@ -1,8 +1,13 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import data from "../assets/json/transaction.json"
+import ModalEditProfile from "../components/ModalEditProfile";
 
-const Transaction = () => {
+const Transaction = (props) => {
+  const { user } = props
+  const [showEdit, setModalEdit] = useState(false);
   return (
+    <>
     <Container className="detail col-9">
       <Row className="d-flex justify-content-between">
         <Col className="header col-6">
@@ -21,17 +26,26 @@ const Transaction = () => {
             <img
               src={`/img/profile.png`}
               alt="profle"
-              style={{ width: "180px", marginRight: "1.5rem" }}
+              style={{ width: "180px", marginRight: "1.5rem", height: "250px", objectFit: "cover" }}
             />
             <div>
               <p className="mb-1">
                 <b>Full Name</b>
               </p>
-              <span>Marcel Ganteng</span>
-              <p className="mb-1 mt-4">
+              <span>{user.fullname}</span>
+              <p className="mb-1 mt-3">
                 <b>Email</b>
               </p>
-              <span>tommymh21@gmail.com</span>
+              <span>{user.email}</span>
+              <p className="mb-1 mt-3">
+                <b>Phone</b>
+              </p>
+              <span>{user.profile?.phone === "" ? "-" : user.profile?.phone}</span>
+              <p className="mb-1 mt-3">
+                <b>Address</b>
+              </p>
+              <span className="profileAddress">{user.profile?.address === "" ? "-" : user.profile?.address }</span>
+              <Button className="profileBtn" onClick={() => setModalEdit(true)}>Edit Profile</Button>
             </div>
           </div>
         </Col>
@@ -99,6 +113,11 @@ const Transaction = () => {
         </Col>
       </Row>
     </Container>
+      <ModalEditProfile 
+      showEdit={showEdit}
+      hideEdit={setModalEdit}
+      />
+      </>
   );
 };
 

@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"waysbeans/dto"
 	"waysbeans/dto/result"
@@ -50,7 +51,7 @@ func (h *productControl) GetProducts(c echo.Context) error {
 func (h *productControl) CreateProduct(c echo.Context) error {
 	// get file IMAGE
 	dataFile := c.Get("dataFile").(string)
-	fmt.Println("this is data file", dataFile)
+	fmt.Println(dataFile, "upload successfully")
 
 	// convert request STRING TO INT
 	price, _ := strconv.Atoi(c.FormValue("price"))
@@ -98,7 +99,6 @@ func (h *productControl) CreateProduct(c echo.Context) error {
 func (h *productControl) UpdateProduct(c echo.Context) error {
 	// get file IMAGE
 	dataFile := c.Get("dataFile").(string)
-	fmt.Println("update files success", dataFile)
 
 	// request data product
 	request := new(dto.UpdateProductRequest)
@@ -129,6 +129,16 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 		product.Stock = request.Stock
 	}
 	if dataFile != "" {
+		// delete image old in file and update new image
+	fileName := product.Photo
+	filePath := "uploads/" + fileName
+	err = os.Remove(filePath)
+	if err != nil {
+		fmt.Println("Failed to delete file"+fileName+":", err)
+		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
+	}
+	fmt.Println(dataFile + " update successfully")
+
 		product.Photo = dataFile
 
 	}
@@ -144,20 +154,26 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 // FUNCTION DELETE PRODUCT
 func (h *productControl) DeleteProduct(c echo.Context) error {
 	// get url param ID
-	// id, _ := strconv.Atoi(c.Param("id"))
-
-	// get user FROM JWT TOKEN
-	userLogin := c.Get("userLogin")
-	userId := userLogin.(jwt.MapClaims)["id"].(float64)
+	id, _ := strconv.Atoi(c.Param("id"))
 
 	// run REPOSITORY get products
-	product, err := h.ProductRepository.GetProducts(int(userId))
+	product, err := h.ProductRepository.GetProducts(id)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, result.ErrorResult{Status: http.StatusBadRequest, Message: err.Error()})
 	}
 
+	// delete image in file
+	fileName := product.Photo
+	filePath := "uploads/" + fileName
+	err = os.Remove(filePath)
+	if err != nil {
+		fmt.Println("Failed to delete file"+fileName+":", err)
+		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
+	}
+	fmt.Println(fileName + " deleted successfully")
+
 	// run REPOSITORY delete product
-	data, err := h.ProductRepository.DeleteProduct(product)
+	data, err := h.ProductRepository.DeleteProduct(product, id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
 	}

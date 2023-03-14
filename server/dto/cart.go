@@ -9,5 +9,6 @@ type CartRequest struct {
 type CartResponse struct {
 	ProductID int `json:"product_id" gorm:"type: int"`
 	OrderQty  int `json:"order_quantity" gorm:"type: int"`
+	Subtotal  int `json:"subtotal"`
 	UserID    int `json:"user_id"`
 }

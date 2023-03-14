@@ -9,6 +9,7 @@ type Cart struct {
 	ProductID int           `json:"product_id" gorm:"type: int"`
 	Product   ProductToCart `json:"product"`
 	OrderQty  int           `json:"order_qty" gorm:"type: int"`
+	Subtotal  int           `json:"subtotal" gorm:"type: int"`
 	CreatedAt time.Time     `json:"-"`
 	UpdatedAt time.Time     `json:"-"`
 }

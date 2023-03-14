@@ -50,13 +50,13 @@
 
 .nav .login {
   background-color: transparent;
-  color: #613D2B;
-  border: 2px solid #613D2B;
+  color: #613d2b;
+  border: 2px solid #613d2b;
   font-weight: 700;
 }
 
 .nav .register {
-  background-color: #613D2B;
+  background-color: #613d2b;
   color: #fff;
   border: none;
 }
@@ -71,15 +71,17 @@
 }
 
 .home .header {
-  background-color: #DBB699;
+  background-color: #dbb699;
   padding: 3.5rem 3.5rem 8rem;
 }
 
-.home .header h3, .home .header p {
+.home .header h3,
+.home .header p {
   font-weight: 400;
 }
 
-.home .img, .home .logo {
+.home .img,
+.home .logo {
   width: 432px;
 }
 
@@ -114,6 +116,42 @@
 
 .detail .header img {
   width: 436px;
+}
+
+.detailImg {
+  height: 520px;
+  -o-object-fit: cover;
+  object-fit: cover;
+  width: 100%;
+}
+
+.detailName {
+  font-weight: 900;
+  font-size: 48px;
+  color: #613d2b;
+}
+
+.detailStock {
+  color: #974a4a;
+}
+
+.detailprice {
+  text-align: right;
+  font-weight: 900;
+  font-size: 24px;
+  color: #974a4a;
+  margin-bottom: 3rem;
+  margin-top: 2rem;
+}
+
+.detaildesc {
+  text-align: justify;
+}
+
+.detailBtnAdd {
+  background-color: #613d2b;
+  color: #fff;
+  border: none;
 }
 
 .lessQty {
@@ -160,11 +198,21 @@
 
 .productadd .formInputProduct {
   background-color: rgba(97, 61, 43, 0.2509803922);
-  border: 2px solid #613D2B;
+  border: 2px solid #613d2b;
 }
 
 .productadd .formInputTextarea {
   background-color: rgba(97, 61, 43, 0.2509803922);
-  border: 2px solid #613D2B;
+  border: 2px solid #613d2b;
   resize: none;
-}/*# sourceMappingURL=style.css.map */
+}
+
+.profileAddress {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.profileBtn {
+  background-color: #613d2b;
+  border: none;
+}
