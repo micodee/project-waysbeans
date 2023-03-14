@@ -15,8 +15,9 @@ type Cart struct {
 }
 
 type CartToUser struct {
-	ProductID int `json:"product_id" gorm:"type: int"`
-	OrderQty  int `json:"order_qty" gorm:"type: int"`
+	ProductID int `json:"product_id"`
+	OrderQty  int `json:"order_qty"`
+	Subtotal  int `json:"subtotal"`
 	UserID    int `json:"-"`
 }
 

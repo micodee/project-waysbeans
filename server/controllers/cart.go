@@ -48,6 +48,7 @@ func (h *cartControl) GetCart(c echo.Context) error {
 }
 
 func (h *cartControl) CreateCart(c echo.Context) error {
+	// get request by dto
 	request := new(dto.CartRequest)
 	if err := c.Bind(request); err != nil {
 		return c.JSON(http.StatusBadRequest, result.ErrorResult{Status: http.StatusBadRequest, Message: err.Error()})

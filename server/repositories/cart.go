@@ -11,6 +11,7 @@ type CartRepository interface {
 	GetCart(ID int) (models.Cart, error)
 	CreateCart(cart models.Cart, ID int) (models.Cart, error)
 	DeleteCart(cart models.Cart, ID int) (models.Cart, error)
+	DelCart(cart models.Cart) (models.Cart, error)
 }
 
 func RepositoryCart(db *gorm.DB) *repository {
@@ -36,5 +37,10 @@ func (r *repository) CreateCart(cart models.Cart, ID int) (models.Cart, error) {
 
 func (r *repository) DeleteCart(cart models.Cart, ID int) (models.Cart, error) {
 	err := r.db.Delete(&cart).Error
+	return cart, err
+}
+
+func (r *repository) DelCart(cart models.Cart) (models.Cart, error) {
+	err := r.db.Delete(&cart).Scan(&cart).Error
 	return cart, err
 }

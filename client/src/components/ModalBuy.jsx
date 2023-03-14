@@ -71,7 +71,7 @@ const ModalBuy = (props) => {
       Swal.fire({
         position: 'center',
         icon: 'error',
-        title: 'Login Failed',
+        title: 'Payment Failed',
         showConfirmButton: false,
         timer: 1500
       })

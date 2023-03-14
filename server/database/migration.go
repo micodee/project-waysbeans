@@ -13,6 +13,7 @@ func RunMigration() {
 		&models.Profile{},
 		&models.Cart{},
 		&models.Transaction{},
+		&models.CartToTransaction{},
 	)
 
 	if err != nil {
