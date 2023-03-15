@@ -76,10 +76,26 @@ const Cart = (props) => {
   };
 
   const SubmitPayment = useMutation(async (e) => {
+    const config = {
+      headers: {
+        'Content-type': 'application/json',
+      },
+    };
+    const formData = new FormData();
+    formData.set('name', formPayment.name);
+    formData.set('email', formPayment.email);
+    formData.set('phone', formPayment.phone);
+    formData.set('address', formPayment.address);
+
+    let formDataObject = {};
+    for (const [key, value] of formData.entries()) {
+      formDataObject[key] = value;
+    }
+    const formDataJSON = JSON.stringify(formDataObject);
     try {
       e.preventDefault();
   
-      const response = await API.post('/transaction', formPayment);
+      const response = await API.post('/transaction', formDataJSON, config);
       const token = response.data.data.token
   
       window.snap.pay(token, {
@@ -93,11 +109,6 @@ const Cart = (props) => {
             });
             props.SetProducts(updatedProducts);
           }
-          const paidProducts = [];
-          for (let cart of props.UserCarts.filter(cart => cart.user_id === props.user.id)) {
-            const newProduct = {product_name: props.Products.find(product => product.id === cart.product_id).name, product_photo: props.Products.find(product => product.id === cart.product_id).photo};
-            paidProducts.push(newProduct);
-          }
           props.SetUserCarts([]);
           const newTransactionData = {
             id: props.Transactions.length + 1,
@@ -106,13 +117,21 @@ const Cart = (props) => {
             phone: formPayment.phone,
             address: formPayment.address,
             created_at: new Date(),
-            cart: paidProducts,
-            total_quantity: formPayment.total_quantity,
-            total_price: formPayment.total_price,
             status: "success",
             user: {id:props.user.id},
           }
           props.SetTransactions([...props.Transactions, newTransactionData]);
+
+          setPayment((formPayment) => ({
+            ...formPayment,
+            name: props.user.name,
+            email: props.user.email,
+            phone: props.user.profile.phone,
+            address: props.user.profile.address,
+            total_quantity: asceding?.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentValue) => accumulator + currentValue.order_qty, 0),
+            total_price: asceding.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0),
+          }));
+
          
           Swal.fire({
             position: 'center',

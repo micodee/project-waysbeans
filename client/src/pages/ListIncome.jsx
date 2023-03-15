@@ -35,6 +35,20 @@ const ListIncome = (props) => {
             </thead>
             <tbody>
               {transaction?.map((item, index) => {
+                let style;
+                if (item.status === "success") {
+                  style = {
+                    color: "#78A85A"
+                  };
+                } else if (item.status === "pending") {
+                  style = {
+                    color: "#FF9900"
+                  };
+                } else if (item.status === "failed") {
+                  style = {
+                    color: "#E83939"
+                  };
+                }
                 return(
                 <tr key={index}>
                   <td style={{ verticalAlign: "middle" }}>{index + 1}</td>
@@ -42,7 +56,7 @@ const ListIncome = (props) => {
                   <td>{item.address}</td>
                   <td>{item.cart.map((product, index) => <div>{`${product.product_name} ${product.order_quantity} x ${product.product_price}`}</div>)}</td>
                   <td>{item.total_price}</td>
-                  <td style={{ color: "#FF9900" }}>{item.status}</td>
+                  <td style={style}>{item.status}</td>
                 </tr>)
               })}
             </tbody>
