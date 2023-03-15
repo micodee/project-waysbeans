@@ -36,11 +36,61 @@ const Cart = (props) => {
     }
   });
 
+  // sort by id
   let asceding = [];
   if (carts != null) {
     asceding = [...carts];
     asceding.sort((a, b) => b.id - a.id);
   }
+
+  const [formPayment, setPayment] = useState({
+    name: props.user.fullname,
+    email: props.user.email,
+    phone: props.user.profile.phone,
+    address: props.user.profile.address,
+    total_quantity: asceding?.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentValue) => accumulator + currentValue.order_qty, 0),
+    total_price: asceding.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0),
+  });
+
+  const ChangePayment = (e) => {
+    setPayment({
+      ...formPayment,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const SubmitPayment = useMutation(async (e) => {
+    try {
+      e.preventDefault();
+  
+      const response = await API.post('/transaction', formPayment);
+  
+      console.log("transaction success : ", response)
+  
+      setPayment({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+      });
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Payment Success',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      setModalBuy(false)
+    } catch (error) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Payment Failed',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+  });
 
   return (
     <>
@@ -117,6 +167,9 @@ const Cart = (props) => {
       hideEdit={setModalBuy} 
       total={asceding.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0)}
       qty={asceding?.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentValue) => accumulator + currentValue.order_qty, 0)}
+      formPayment={formPayment} 
+      ChangePayment={(e) => ChangePayment(e)}
+      SubmitPayment={(e) => SubmitPayment.mutate(e)}
       />
     </>
   );

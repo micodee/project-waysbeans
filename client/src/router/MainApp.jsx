@@ -62,11 +62,22 @@ const MainApp = () => {
   const [Transactions, SetTransactions] = useState(dataTransaction)
 
   const [ProductsList, SetProductsList] = useState([]);
+  const [TransactionsList, SetTransactionsList] = useState([]);
 
     useQuery('productsCache', async () => {
       try {
         const response = await API.get('/products');
         SetProductsList(response.data.data);
+      }
+      catch (error) {
+        return
+      }
+    });
+
+    useQuery('transactionsCache', async () => {
+      try {
+        const response = await API.get('/transaction');
+        SetTransactionsList(response.data.data);
       }
       catch (error) {
         return
@@ -84,8 +95,8 @@ const MainApp = () => {
           <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} user={state.user}  />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
-            <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} user={state.user} Products={ProductsList}  />} />
-            <Route path="/profile" element={<Transaction Transactions={Transactions} user={state.user} />} />
+            <Route path="/cart" element={<Cart Transactions={Transactions} SetTransactions={SetTransactions} user={state.user} Products={ProductsList} />} />
+            <Route path="/profile" element={<Transaction Transactions={Transactions} user={state.user} TransactionsList={TransactionsList}  />} />
           </Route>
 
           <Route path="/" element={<RouteAdmin IsAdmin={state.user.role}/>}>

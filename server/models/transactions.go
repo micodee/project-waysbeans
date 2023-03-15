@@ -14,8 +14,8 @@ type Transaction struct {
 	TotalQuantity int                 `json:"total_quantity" gorm:"type: int"`
 	TotalPrice    int                 `json:"total_price" gorm:"type: int"`
 	Cart          []CartToTransaction `json:"cart"`
-	CreatedAt     time.Time           `json:"-"`
-	UpdatedAt     time.Time           `json:"-"`
+	CreatedAt     time.Time           `json:"created_at"`
+	UpdatedAt     time.Time           `json:"updated_at"`
 }
 
 type CartToTransaction struct {

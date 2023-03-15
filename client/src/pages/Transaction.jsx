@@ -62,7 +62,7 @@ const Transaction = (props) => {
             My Transaction
           </h2>
           <div className="d-flex flex-column gap-2">
-          {data.map((item, index) => {
+          {props.TransactionsList?.filter((e) => e.user_id === props.user.id).map((item, index) => {
            let style;
            if (item.status === "Success") {
              style = {
@@ -72,7 +72,7 @@ const Transaction = (props) => {
                fontSize: "10px",
                color: "#78A85A"
              };
-           } else if (item.status === "Waiting Approve") {
+           } else if (item.status === "pending") {
              style = {
                backgroundColor: "#f7dec4",
                width: "112px",
@@ -92,13 +92,12 @@ const Transaction = (props) => {
            return(
             <div key={index} style={{ backgroundColor: "#F6E6DA", padding: "1rem 1.5rem" }} className="d-flex justify-content-between gap-3">
            <div style={{ display: "flex", gap: "1rem" }}>
-            <img src={item.image} alt="product" height={120} style={{ width: "80px" }} />
+            <img src={`http://localhost:5001/uploads/image-1586134062.png`} alt="product" height={120} style={{ width: "80px" }} />
             <div className="d-flex justify-content-center flex-column">
-             <p className="mb-1" style={{ fontSize: "14px" }}><b>{item.title}</b></p>
-             <span style={{ fontSize: "9px" }}><b>Saturday</b>, 5 March 2020</span>
-             <p className="mb-1" style={{ fontSize: "10px", fontWeight: "400", marginTop: "1rem" }}>Price : Rp.{item.price}</p>
-             <p className="mb-1" style={{ fontSize: "10px", fontWeight: "400", }}>Qty : {item.qty}</p>
-             <p className="mb-1" style={{ fontSize: "10px", fontWeight: "400", }}><b>Sub Total : {item.price*item.qty}</b></p>
+             <p className="mb-1" style={{ fontSize: "14px" }}>ID Transaction <b>{item.id}</b></p>
+             <span style={{ fontSize: "9px" }}><b>Saturday</b>, {item.created_at}</span>
+             <p className="mb-1 mt-1" style={{ fontSize: "10px", fontWeight: "400", }}>Total Qty : {item.total_quantity}</p>
+             <p className="mb-1" style={{ fontSize: "10px", fontWeight: "400", }}><b>Sub Total : {item.total_price}</b></p>
             </div>
            </div>
            <div className="d-flex justify-content-center align-items-center flex-column col-3">
