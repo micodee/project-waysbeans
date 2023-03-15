@@ -5,8 +5,10 @@ import { useQuery, useMutation } from "react-query";
 import { API } from "../config/api";
 import Swal from "sweetalert2";
 import ModalBuy from "../components/ModalBuy";
+import { useNavigate } from "react-router-dom";
 
 const Cart = (props) => {
+  let navigate = useNavigate()
   const { cart, setCart } = props;
   const [showbuy, setModalBuy] = useState(false);
 
@@ -80,6 +82,7 @@ const Cart = (props) => {
         showConfirmButton: false,
         timer: 1500
       })
+      navigate('/profile')
       setModalBuy(false)
     } catch (error) {
       Swal.fire({

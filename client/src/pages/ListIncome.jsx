@@ -1,6 +1,12 @@
 import { Container, Row, Col, Table } from "react-bootstrap";
 
-const ListIncome = () => {
+const ListIncome = (props) => {
+  // sort by id
+  let transaction = [];
+  if (props.TransactionsList != null) {
+    transaction = [...props.TransactionsList];
+    transaction.sort((a, b) => b.id - a.id);
+  }
   return (
     <Container className="detail col-9">
       <Row className="d-flex justify-content-between">
@@ -14,7 +20,7 @@ const ListIncome = () => {
               fontSize: "24px",
             }}
           >
-            Income Transaction 
+            Income Transaction
           </h2>
           <Table bordered hover>
             <thead>
@@ -22,44 +28,23 @@ const ListIncome = () => {
                 <th>No</th>
                 <th>Name</th>
                 <th>Address</th>
-                <th>Post Code</th>
                 <th>Products Order</th>
+                <th>Total Order</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td style={{ verticalAlign: "middle" }}>1</td>
-                <td>Sugeng No Pants</td>
-                <td>Cileungsi</td>
-                <td>16820</td>
-                <td>RWANDA Beans</td>
-                <td style={{ color: "#FF9900" }}>Waiting Approve</td>
-              </tr>
-              <tr>
-                <td style={{ verticalAlign: "middle" }}>2</td>
-                <td>Haris Gams</td>
-                <td>Serang</td>
-                <td>42111</td>
-                <td>ETHIOPIA Beans</td>
-                <td style={{ color: "#78A85A" }}>Success</td>
-              </tr>
-              <tr>
-                <td style={{ verticalAlign: "middle" }}>3</td>
-                <td>Aziz Union</td>
-                <td>Bekasi</td>
-                <td>13450</td>
-                <td>GUETEMALA Beans</td>
-                <td style={{ color: "#E83939" }}>Cancel</td>
-              </tr>
-              <tr>
-                <td style={{ verticalAlign: "middle" }}>4</td>
-                <td>Lae Tanjung Balai</td>
-                <td>Tanjung Balai</td>
-                <td>21331</td>
-                <td>NICARAGUA Beans</td>
-                <td style={{ color: "#00D1FF" }}>On The Way</td>
-              </tr>
+              {transaction?.map((item, index) => {
+                return(
+                <tr key={index}>
+                  <td style={{ verticalAlign: "middle" }}>{index + 1}</td>
+                  <td>{item.name}</td>
+                  <td>{item.address}</td>
+                  <td>{item.cart.map((product, index) => <div>{`${product.product_name} ${product.order_quantity} x ${product.product_price}`}</div>)}</td>
+                  <td>{item.total_price}</td>
+                  <td style={{ color: "#FF9900" }}>{item.status}</td>
+                </tr>)
+              })}
             </tbody>
           </Table>
         </Col>

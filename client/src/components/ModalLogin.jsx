@@ -58,6 +58,7 @@ const ModalLogin = (props) => {
       // Status check
       if (response.data.data.role === 'admin') {
         navigate('/list-income');
+        window.location.reload();
       } else if (response.data.data.role === 'user') {
         navigate('/profile');
         window.location.reload();
