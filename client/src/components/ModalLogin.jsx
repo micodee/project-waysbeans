@@ -14,7 +14,6 @@ const ModalLogin = (props) => {
   // agar submit tidak merefresh
 
   const [_, dispatch] = useContext(UserContext);
-  console.log(_);
 
   const [formLogin, setFormLogin] = useState({
     email: "",

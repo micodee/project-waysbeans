@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import ProductCart from "../components/ProductCart";
 import { useQuery, useMutation } from "react-query";
@@ -11,6 +11,20 @@ const Cart = (props) => {
   let navigate = useNavigate()
   const { cart, setCart } = props;
   const [showbuy, setModalBuy] = useState(false);
+
+  useEffect(() => {
+    const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const myMidtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
+  
+    let scriptTag = document.createElement("script");
+    scriptTag.src = midtransScriptUrl;
+    scriptTag.setAttribute("data-client-key", myMidtransClientKey);
+  
+    document.body.appendChild(scriptTag);
+    return () => {
+      document.body.removeChild(scriptTag);
+    };
+  }, []);
 
   const handleQty = (count) => {
     setCart(cart + count);
@@ -66,23 +80,59 @@ const Cart = (props) => {
       e.preventDefault();
   
       const response = await API.post('/transaction', formPayment);
+      const token = response.data.data.token
   
-      console.log("transaction success : ", response)
-  
-      setPayment({
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
+      window.snap.pay(token, {
+        onSuccess: function (result) {
+          for (let cart of props.UserCarts.filter(cart => cart.user_id === props.user.id)) {
+            const updatedProducts = props.Products.map((product) => {
+              if (product.id === cart.product_id) {
+                return { ...product, stock: product.stock - cart.order_qty };
+              }
+              return product;
+            });
+            props.SetProducts(updatedProducts);
+          }
+          const paidProducts = [];
+          for (let cart of props.UserCarts.filter(cart => cart.user_id === props.user.id)) {
+            const newProduct = {product_name: props.Products.find(product => product.id === cart.product_id).name, product_photo: props.Products.find(product => product.id === cart.product_id).photo};
+            paidProducts.push(newProduct);
+          }
+          props.SetUserCarts([]);
+          const newTransactionData = {
+            id: props.Transactions.length + 1,
+            name: formPayment.name,
+            email: formPayment.email,
+            phone: formPayment.phone,
+            address: formPayment.address,
+            created_at: new Date(),
+            cart: paidProducts,
+            total_quantity: formPayment.total_quantity,
+            total_price: formPayment.total_price,
+            status: "success",
+            user: {id:props.user.id},
+          }
+          props.SetTransactions([...props.Transactions, newTransactionData]);
+         
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Payment Success',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          navigate('/profile')
+        },
+        onPending: function (result) {
+          return
+        },
+        onError: function (result) {
+          return
+        },
+        onClose: function () {
+          return
+        },
       });
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Payment Success',
-        showConfirmButton: false,
-        timer: 1500
-      })
-      navigate('/profile')
       setModalBuy(false)
     } catch (error) {
       Swal.fire({

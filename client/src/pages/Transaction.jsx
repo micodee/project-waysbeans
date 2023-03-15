@@ -64,7 +64,7 @@ const Transaction = (props) => {
           <div className="d-flex flex-column gap-2">
           {props.TransactionsList?.filter((e) => e.user_id === props.user.id).map((item, index) => {
            let style;
-           if (item.status === "Success") {
+           if (item.status === "success") {
              style = {
                backgroundColor: "#e4e8c6",
                width: "112px",
@@ -80,7 +80,7 @@ const Transaction = (props) => {
                fontSize: "10px",
                color: "#FF9900"
              };
-           } else if (item.status === "Complete") {
+           } else if (item.status === "failed") {
              style = {
                backgroundColor: "#613d2b",
                width: "112px",

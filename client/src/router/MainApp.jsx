@@ -15,7 +15,6 @@ const MainApp = () => {
   const [state, dispatch] = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true)
 
-  console.log(state);
   useEffect(() => {
     // Redirect Auth but just when isLoading is false
     if (!isLoading) {
@@ -40,7 +39,6 @@ const MainApp = () => {
       console.log("check user success : ", response)
       // Get user data
       let payload = response.data.data;
-      console.log(payload);
       // Get token from local storage
       payload.token = localStorage.token;
       // Send data to useContext
@@ -60,6 +58,7 @@ const MainApp = () => {
 
   const [ProductsList, SetProductsList] = useState([]);
   const [TransactionsList, SetTransactionsList] = useState([]);
+  const [UserCarts, SetUserCarts] = useState([]);
 
     useQuery('productsCache', async () => {
       try {
@@ -81,6 +80,16 @@ const MainApp = () => {
       }
     });
 
+    useQuery('usercartsCache', async () => {
+      try {
+        const response = await API.get('/cart');
+        SetUserCarts(response.data.data);
+      }
+      catch (error) {
+        return
+      }
+    });
+
 
 
   return (
@@ -92,7 +101,7 @@ const MainApp = () => {
           <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} user={state.user}  />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
-            <Route path="/cart" element={<Cart user={state.user} Products={ProductsList} />} />
+            <Route path="/cart" element={<Cart user={state.user} Products={ProductsList} SetProductsList={SetProductsList} UserCarts={UserCarts} SetUserCarts={SetUserCarts} TransactionsList={TransactionsList} SetTransactionsList={SetTransactionsList} />} />
             <Route path="/profile" element={<Transaction user={state.user} TransactionsList={TransactionsList} />} />
           </Route>
 
