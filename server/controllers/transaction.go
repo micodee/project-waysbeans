@@ -97,6 +97,10 @@ func (h *transactionControl) CreateTransaction(c echo.Context) error {
 		totalPrice += cart.OrderQty * product.Price
 	}
 
+	var userTransaction models.UsersRelation
+	userTransaction.ID = user.ID
+	userTransaction.Name = user.Name
+
 	var productTransaction []models.CartToTransaction
 	for _, cart := range user.Cart {
 		product, err := h.ProductRepository.GetProducts(cart.ProductID)
@@ -135,7 +139,7 @@ func (h *transactionControl) CreateTransaction(c echo.Context) error {
 	transaction := models.Transaction{
 		ID:            transactionId,
 		UserID:        int(userId),
-		User:          models.UsersRelation{},
+		User:          userTransaction,
 		Name:          request.Name,
 		Email:         request.Email,
 		Phone:         request.Phone,
