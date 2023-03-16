@@ -55,7 +55,7 @@ const Home = () => {
             >
               <Card.Img
                 variant="top"
-                src={`http://localhost:5001/uploads/${item.photo}`}
+                src={item.photo}
                 style={{ width: "100%", height: "320px", objectFit: "cover" }}
               />
               <Card.Body style={{ backgroundColor: "#F6E6DA" }}>

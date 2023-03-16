@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
@@ -10,6 +11,8 @@ import (
 	"waysbeans/models"
 	"waysbeans/repositories"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/go-playground/validator"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -31,6 +34,12 @@ func (h *productControl) FindProducts(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, result.ErrorResult{Status: http.StatusBadRequest, Message: err.Error()})
 	}
+
+	// cloudinary
+	for i, p := range products {
+		imagePath := os.Getenv("PATH_FILE") + p.Photo
+		products[i].Photo = imagePath
+	}
 	return c.JSON(http.StatusOK, result.SuccessResult{Status: http.StatusOK, Data: products})
 }
 
@@ -44,14 +53,17 @@ func (h *productControl) GetProducts(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, result.ErrorResult{Status: http.StatusBadRequest, Message: err.Error()})
 	}
+
+	// cloudinary
+	products.Photo = os.Getenv("PATH_FILE") + products.Photo
 	return c.JSON(http.StatusOK, result.SuccessResult{Status: http.StatusOK, Data: convProduct(products)})
 }
 
 // FUNCTION CREATE PRODUCT
 func (h *productControl) CreateProduct(c echo.Context) error {
 	// get file IMAGE
-	dataFile := c.Get("dataFile").(string)
-	fmt.Println(dataFile, "upload successfully")
+	filepath := c.Get("dataFile").(string)
+	fmt.Println(filepath, "upload successfully")
 
 	// convert request STRING TO INT
 	price, _ := strconv.Atoi(c.FormValue("price"))
@@ -62,7 +74,7 @@ func (h *productControl) CreateProduct(c echo.Context) error {
 		Name:        c.FormValue("name"),
 		Description: c.FormValue("desc"),
 		Price:       price,
-		Photo:       dataFile,
+		Photo:       filepath,
 		Stock:       stock,
 	}
 
@@ -71,6 +83,19 @@ func (h *productControl) CreateProduct(c echo.Context) error {
 	err := validation.Struct(request)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, result.ErrorResult{Status: http.StatusBadRequest, Message: err.Error()})
+	}
+
+	// cloudinary
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
+
+	// cloudinary
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+	resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbeans"})
+	if err != nil {
+		fmt.Println(err.Error())
 	}
 
 	// get user FROM JWT TOKEN
@@ -83,7 +108,7 @@ func (h *productControl) CreateProduct(c echo.Context) error {
 		Price:       request.Price,
 		Description: request.Description,
 		Stock:       request.Stock,
-		Photo:       request.Photo,
+		Photo:       resp.SecureURL,
 		UserID:      int(userId),
 	}
 
@@ -130,14 +155,14 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 	}
 	if dataFile != "" {
 		// delete image old in file and update new image
-	fileName := product.Photo
-	filePath := "uploads/" + fileName
-	err = os.Remove(filePath)
-	if err != nil {
-		fmt.Println("Failed to delete file"+fileName+":", err)
-		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
-	}
-	fmt.Println(dataFile + " update successfully")
+		fileName := product.Photo
+		filePath := "uploads/" + fileName
+		err = os.Remove(filePath)
+		if err != nil {
+			fmt.Println("Failed to delete file"+fileName+":", err)
+			return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
+		}
+		fmt.Println(dataFile + " update successfully")
 
 		product.Photo = dataFile
 
@@ -161,16 +186,22 @@ func (h *productControl) DeleteProduct(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, result.ErrorResult{Status: http.StatusBadRequest, Message: err.Error()})
 	}
+	// cloudinary
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
 
-	// delete image in file
+	// create a new cloudinary
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+
 	fileName := product.Photo
-	filePath := "uploads/" + fileName
-	err = os.Remove(filePath)
+	del, err := cld.Upload.Destroy(ctx, uploader.DestroyParams{PublicID: fileName})
 	if err != nil {
 		fmt.Println("Failed to delete file"+fileName+":", err)
 		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
 	}
-	fmt.Println(fileName + " deleted successfully")
+	fmt.Println(fileName+" deleted successfully", del)
 
 	// run REPOSITORY delete product
 	data, err := h.ProductRepository.DeleteProduct(product, id)

@@ -106,7 +106,7 @@ const ListProduct = () => {
                 return (
                   <tr key={item.id}>
                     <td style={{ verticalAlign: "middle" }}>{index + 1}</td>
-                    <td style={{ verticalAlign: "middle" }}><img src={`http://localhost:5001/uploads/${item.photo}`} alt={item.name} style={{ width: "100px", height: "130px", objectFit: "cover" }} /></td>
+                    <td style={{ verticalAlign: "middle" }}><img src={item.photo} alt={item.name} style={{ width: "100px", height: "130px", objectFit: "cover" }} /></td>
                     <td style={{ verticalAlign: "middle" }}>{item.name}</td>
                     <td className="text-center" style={{ verticalAlign: "middle" }}>{item.stock}</td>
                     <td className="text-center" style={{ verticalAlign: "middle" }}>{item.price}</td>

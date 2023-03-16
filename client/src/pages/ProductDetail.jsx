@@ -72,7 +72,7 @@ const ProductDetail = (props) => {
    <Container className="detail col-9">
    <Row className="d-flex justify-content-between">
      <Col className="header col-4">
-       <img src={`http://localhost:5001/uploads/${Product.photo}`} alt={Product.name} className="detailImg"/>
+       <img src={Product.photo} alt={Product.name} className="detailImg"/>
      </Col>
      <Col className="header col-7 d-flex justify-content-center align-items-center">
        <div className="col-10">
