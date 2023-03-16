@@ -1,20 +1,7 @@
 import React, { useState } from "react";
 
 const ProductCart = (props) => {
-  const { handleQty, handleTotal } = props;
   const [count, setCount] = useState(props.item.order_qty);
-
-  const handleAdd = () => {
-    setCount(count + 1);
-    handleQty(1);
-    handleTotal(1, props.product.price);
-  };
-
-  const handleLess = () => {
-    if (count === 0) return;
-    setCount(count - 1);
-    handleQty(-1);
-  };
 
   return (
     <div>
@@ -32,7 +19,7 @@ const ProductCart = (props) => {
               {props.product.name}
             </h6>
             <div className="d-flex align-items-center gap-2">
-              <span className="lessQty" onClick={handleLess}></span>
+              <span className="lessQty" onClick={props.increase}></span>
               <span
                 style={{
                   backgroundColor: "#F6E6DA",
@@ -42,7 +29,7 @@ const ProductCart = (props) => {
               >
                 {count}
               </span>
-              <span className="addQty" onClick={handleAdd}></span>
+              <span className="addQty" onClick={props.decrease}></span>
             </div>
           </div>
         </div>

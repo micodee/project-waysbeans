@@ -164,6 +164,45 @@ const Cart = (props) => {
     }
   });
 
+  const increaseQuantity = async (id) => {
+      try {
+        await API.patch('/increase-order-quantity/' + id);
+      }
+      catch (error) {
+        return
+      }
+      const updatedCarts = props.UserCarts.map((cart) => {
+        if (cart.user_id === props.User.id) {
+          if (cart.id === id) {
+            return { ...cart, order_quantity: cart.order_quantity + 1 };
+          }
+          return cart;
+        }
+        return cart;
+      });
+      props.SetUserCarts(updatedCarts);
+  }
+  const decreaseQuantity = async (id) => {
+    if (props.UserCarts.find(cart => cart.id === id).order_quantity > 1) {
+      try {
+        await API.patch('/decrease-order-quantity/' + id);
+      }
+      catch (error) {
+        return
+      }
+      const updatedCarts = props.UserCarts.map((cart) => {
+        if (cart.user_id === props.User.id) {
+          if (cart.id === id) {
+            return { ...cart, order_quantity: cart.order_quantity - 1 };
+          }
+          return cart;
+        }
+        return cart;
+      });
+      props.SetUserCarts(updatedCarts);
+    }
+  }
+
   return (
     <>
       <Container className="detail col-9">
@@ -191,6 +230,8 @@ const Cart = (props) => {
                       product={item.product}
                       handleQty={handleQty}
                       delete={() => deleteById.mutate(item.id)}
+                      increase={() => increaseQuantity(item.id)}
+                      decrease={() => decreaseQuantity(item.id)}
                     />
                   );
                 })}

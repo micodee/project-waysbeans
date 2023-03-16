@@ -18,4 +18,6 @@ func CartRoutes(e *echo.Group) {
 	e.GET("/cart/:id", h.GetCart)
 	e.PATCH("/cart/:product_id", middleware.Auth(h.CreateCart))
 	e.DELETE("/cart/:id", h.DeleteCart)
+	e.PATCH("/increase-order-quantity/:id", middleware.Auth(h.IncreaseOrderQuntity))
+	e.PATCH("/decrease-order-quantity/:id", middleware.Auth(h.DecreaseOrderQuntity))
 }
