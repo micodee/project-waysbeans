@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
 const ProductCart = (props) => {
-  const [count, setCount] = useState(props.item.order_qty);
-
   return (
     <div>
       <hr style={{ height: "2px", backgroundColor: "black" }} />
@@ -19,7 +17,7 @@ const ProductCart = (props) => {
               {props.product.name}
             </h6>
             <div className="d-flex align-items-center gap-2">
-              <span className="lessQty" onClick={props.increase}></span>
+              <span className="lessQty" onClick={props.decrease}></span>
               <span
                 style={{
                   backgroundColor: "#F6E6DA",
@@ -27,9 +25,9 @@ const ProductCart = (props) => {
                   borderRadius: "5px",
                 }}
               >
-                {count}
+                {props.item.order_qty}
               </span>
-              <span className="addQty" onClick={props.decrease}></span>
+              <span className="addQty" onClick={props.increase}></span>
             </div>
           </div>
         </div>

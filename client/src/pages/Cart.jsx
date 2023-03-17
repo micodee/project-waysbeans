@@ -172,9 +172,9 @@ const Cart = (props) => {
         return
       }
       const updatedCarts = props.UserCarts.map((cart) => {
-        if (cart.user_id === props.User.id) {
+        if (cart.user_id === props.user.id) {
           if (cart.id === id) {
-            return { ...cart, order_quantity: cart.order_quantity + 1 };
+            return { ...cart, order_qty: cart.order_qty + 1 };
           }
           return cart;
         }
@@ -183,7 +183,7 @@ const Cart = (props) => {
       props.SetUserCarts(updatedCarts);
   }
   const decreaseQuantity = async (id) => {
-    if (props.UserCarts.find(cart => cart.id === id).order_quantity > 1) {
+    if (props.UserCarts.find(cart => cart.id === id).order_qty > 1) {
       try {
         await API.patch('/decrease-order-quantity/' + id);
       }
@@ -191,9 +191,9 @@ const Cart = (props) => {
         return
       }
       const updatedCarts = props.UserCarts.map((cart) => {
-        if (cart.user_id === props.User.id) {
+        if (cart.user_id === props.user.id) {
           if (cart.id === id) {
-            return { ...cart, order_quantity: cart.order_quantity - 1 };
+            return { ...cart, order_qty: cart.order_qty - 1 };
           }
           return cart;
         }
