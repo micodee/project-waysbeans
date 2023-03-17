@@ -26,7 +26,7 @@ const Header = (props) => {
             </>
           ) : IsLogin === "user" ? (
             <>
-              <UserCust/>
+              <UserCust UserCarts={props.UserCarts} User={props.User}/>
             </>
           ) : (
             <>

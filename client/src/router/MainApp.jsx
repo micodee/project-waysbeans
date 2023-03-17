@@ -94,11 +94,11 @@ const MainApp = () => {
 
   return (
     <>
-        <Header IsLogin={state.user.role} />
+        <Header IsLogin={state.user.role} UserCarts={UserCarts} User={state.user} />
         {isLoading ? null :
         <Routes>
           <Route path="/"  element={<Home />} />
-          <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} user={state.user}  />} />
+          <Route path="/detail/:id" element={<ProductDetail IsLogin={state.user.role} user={state.user} UserCarts={UserCarts} SetUserCarts={SetUserCarts} />} />
 
           <Route path="/" element={<RouteUser IsUser={state.user.role}/>}>
             <Route path="/cart" element={<Cart user={state.user} Products={ProductsList} SetProductsList={SetProductsList} UserCarts={UserCarts} SetUserCarts={SetUserCarts} TransactionsList={TransactionsList} SetTransactionsList={SetTransactionsList} />} />

@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 
 const Cart = (props) => {
   let navigate = useNavigate()
-  const { cart, setCart } = props;
   const [showbuy, setModalBuy] = useState(false);
 
   useEffect(() => {
@@ -25,10 +24,6 @@ const Cart = (props) => {
       document.body.removeChild(scriptTag);
     };
   }, []);
-
-  const handleQty = (count) => {
-    setCart(cart + count);
-  };
 
   let { data: carts, refetch } = useQuery("cartCache", async () => {
     const response = await API.get("/cart");
@@ -228,7 +223,6 @@ const Cart = (props) => {
                     <ProductCart
                       item={item}
                       product={item.product}
-                      handleQty={handleQty}
                       delete={() => deleteById.mutate(item.id)}
                       increase={() => increaseQuantity(item.id)}
                       decrease={() => decreaseQuantity(item.id)}
