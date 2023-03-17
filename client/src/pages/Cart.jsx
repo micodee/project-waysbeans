@@ -240,17 +240,17 @@ const Cart = (props) => {
             </div>
           </Col>
           <Col className="header col-4 d-flex justify-content-end">
-            {asceding?.filter((cart) => cart.user_id === props.user.id).length >
+            {carts?.filter((cart) => cart.user_id === props.user.id).length >
             0 ? (
               <div className="col-12">
                 <hr style={{ height: "2px", backgroundColor: "black" }} />
                 <div className="d-flex justify-content-between">
                   <p>Subtotal</p>
-                  <p>{asceding.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0)}</p>
+                  <p>{props.UserCarts.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0)}</p>
                 </div>
                 <div className="d-flex justify-content-between">
                   <span>Qty</span>
-                  <span>{asceding?.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentValue) => accumulator + currentValue.order_qty, 0)}</span>
+                  <span>{props.UserCarts?.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentValue) => accumulator + currentValue.order_qty, 0)}</span>
                 </div>
                 <hr style={{ height: "2px", backgroundColor: "black" }} />
                 <div className="d-flex justify-content-between">
@@ -258,7 +258,7 @@ const Cart = (props) => {
                     <b>Total</b>
                   </p>
                   <p>
-                    <b>Rp.{asceding.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0)}</b>
+                    <b>Rp.{props.UserCarts.filter(cart => cart.user_id === props.user.id).reduce((accumulator, currentCart) => accumulator + (currentCart.order_qty * props.Products.find(product => product.id === currentCart.product_id).price), 0)}</b>
                   </p>
                 </div>
                 <div className="d-flex justify-content-end mt-4">
