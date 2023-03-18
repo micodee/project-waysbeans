@@ -92,7 +92,7 @@ const Transaction = (props) => {
            return(
             <div key={index} style={{ backgroundColor: "#F6E6DA", padding: "1rem 1.5rem" }} className="d-flex justify-content-between gap-3">
            <div style={{ display: "flex", gap: "1rem" }}>
-            <img src={`http://localhost:5001/uploads/image-1586134062.png`} alt="product" height={120} style={{ width: "80px" }} />
+            <Button className="profileBtn" onClick={() => setModalEdit(true)}>View Details</Button>
             <div className="d-flex justify-content-center flex-column">
              <p className="mb-1" style={{ fontSize: "14px" }}>ID Transaction <b>{item.id}</b></p>
              <span style={{ fontSize: "9px" }}><b>Saturday</b>, {item.created_at}</span>
