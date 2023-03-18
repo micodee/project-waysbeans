@@ -35,6 +35,9 @@ const Cart = (props) => {
       const response = await API.delete(`/cart/${id}`);
       console.log(response);
       refetch();
+      props.SetUserCarts((userCarts) => {
+        return userCarts.filter((item) => !(item.user_id === props.user.id && item.id === id));
+      });
     } catch (error) {
       Swal.fire({
         position: "center",

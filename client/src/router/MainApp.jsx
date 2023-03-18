@@ -59,6 +59,7 @@ const MainApp = () => {
   const [ProductsList, SetProductsList] = useState([]);
   const [TransactionsList, SetTransactionsList] = useState([]);
   const [UserCarts, SetUserCarts] = useState([]);
+  console.log(UserCarts);
 
     useQuery('productsCache', async () => {
       try {
