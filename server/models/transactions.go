@@ -19,7 +19,8 @@ type Transaction struct {
 }
 
 type CartToTransaction struct {
-	ProductID     int    `json:"product_id"`
+	ID            int    `json:"id" gorm:"primary_key: auto_increment"`
+	ProductID     int    `json:"product_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	ProductName   string `json:"product_name"`
 	ProductPhoto  string `json:"product_photo"`
 	ProductPrice  int    `json:"product_price"`
