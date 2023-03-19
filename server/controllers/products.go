@@ -166,9 +166,10 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 	if request.Stock != 0 {
 		product.Stock = request.Stock
 	}
-	if resp.SecureURL != "" {
+	if request.Photo != "" {
 		fmt.Println(resp.SecureURL + " update successfully")
-		product.Photo = filepath
+		product.Photo = resp.SecureURL
+
 	}
 
 	// run REPOSITORY update product
