@@ -168,7 +168,7 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 	}
 	if resp.SecureURL != "" {
 		fmt.Println(resp.SecureURL + " update successfully")
-		product.Photo = resp.SecureURL
+		product.Photo = filepath
 	}
 
 	// run REPOSITORY update product
