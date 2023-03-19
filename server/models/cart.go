@@ -4,10 +4,10 @@ import "time"
 
 type Cart struct {
 	ID        int           `json:"id" gorm:"primary_key:auto_increment"`
-	UserID    int           `json:"user_id"`
-	User      UsersRelation `json:"user"`
-	ProductID int           `json:"product_id" gorm:"type: int"`
-	Product   ProductToCart `json:"product"`
+	UserID    int           `json:"user_id" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	User      UsersRelation `json:"user" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	ProductID int           `json:"product_id" gorm:"type: int" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Product   ProductToCart `json:"product" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	OrderQty  int           `json:"order_qty" gorm:"type: int"`
 	Subtotal  int           `json:"subtotal" gorm:"type: int"`
 	CreatedAt time.Time     `json:"-"`

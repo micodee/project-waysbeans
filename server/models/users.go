@@ -9,8 +9,8 @@ type User struct {
 	Password  string          `json:"password" gorm:"type: varchar(255)"`
 	Role      string          `json:"role" gorm:"type: varchar(255)"`
 	Profile   ProfileToUser   `json:"profile" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Products  []ProductToUser `json:"products"`
-	Cart      []CartToUser    `json:"cart"`
+	Products  []ProductToUser `json:"products" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Cart      []CartToUser    `json:"cart" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	CreatedAt time.Time       `json:"-"`
 	UpdatedAt time.Time       `json:"-"`
 }
