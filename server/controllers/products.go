@@ -128,19 +128,6 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 	// get url param ID
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	// cloudinary
-	var ctx = context.Background()
-	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
-	var API_KEY = os.Getenv("API_KEY")
-	var API_SECRET = os.Getenv("API_SECRET")
-
-	// cloudinary
-	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
-	resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbeans"})
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
 	// run REPOSITORY get products
 	product, err := h.ProductRepository.GetProducts(id)
 	if err != nil {
@@ -161,8 +148,21 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 		product.Stock = request.Stock
 	}
 	if filepath != "" {
+			// cloudinary
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
+
+	// cloudinary
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+	resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbeans"})
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	
 		fmt.Println(resp.SecureURL + " update successfully")
-		product.Photo = filepath
+		product.Photo = resp.SecureURL
 
 	}
 
