@@ -13,7 +13,7 @@ type Transaction struct {
 	Status        string              `json:"status" gorm:"type: varchar(25)"`
 	TotalQuantity int                 `json:"total_quantity" gorm:"type: int"`
 	TotalPrice    int                 `json:"total_price" gorm:"type: int"`
-	Cart          []CartToTransaction `json:"cart" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	Cart          []CartToTransaction `json:"cart" gorm:"foreignKey:TransactionID"`
 	CreatedAt     time.Time           `json:"created_at"`
 	UpdatedAt     time.Time           `json:"updated_at"`
 }
