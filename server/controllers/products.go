@@ -123,7 +123,7 @@ func (h *productControl) CreateProduct(c echo.Context) error {
 // FUNCTION UPDATE PRODUCT
 func (h *productControl) UpdateProduct(c echo.Context) error {
 	// get file IMAGE
-	dataFile := c.Get("dataFile").(string)
+	filepath := c.Get("dataFile").(string)
 
 	// request data product
 	request := new(dto.UpdateProductRequest)
@@ -133,6 +133,19 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 
 	// get url param ID
 	id, _ := strconv.Atoi(c.Param("id"))
+
+	// cloudinary
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
+
+	// cloudinary
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+	resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbeans"})
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 
 	// run REPOSITORY get products
 	product, err := h.ProductRepository.GetProducts(id)
@@ -153,7 +166,7 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 	if request.Stock != 0 {
 		product.Stock = request.Stock
 	}
-	if dataFile != "" {
+	if resp.SecureURL != "" {
 		// delete image old in file and update new image
 		fileName := product.Photo
 		filePath := "uploads/" + fileName
@@ -162,9 +175,9 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 			fmt.Println("Failed to delete file"+fileName+":", err)
 			return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
 		}
-		fmt.Println(dataFile + " update successfully")
+		fmt.Println(resp.SecureURL + " update successfully")
 
-		product.Photo = dataFile
+		product.Photo = resp.SecureURL
 
 	}
 
