@@ -167,18 +167,8 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 		product.Stock = request.Stock
 	}
 	if resp.SecureURL != "" {
-		// delete image old in file and update new image
-		fileName := product.Photo
-		filePath := "uploads/" + fileName
-		err = os.Remove(filePath)
-		if err != nil {
-			fmt.Println("Failed to delete file"+fileName+":", err)
-			return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
-		}
 		fmt.Println(resp.SecureURL + " update successfully")
-
 		product.Photo = resp.SecureURL
-
 	}
 
 	// run REPOSITORY update product

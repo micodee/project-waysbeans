@@ -21,7 +21,7 @@ const ProductUpdate = () => {
 
   async function getDataUpdate() {
     const responseProduct = await API.get('/product/' + id);
-    setImageUrl(`http://localhost:5001/uploads/` + responseProduct.data.data.photo);
+    setImageUrl(responseProduct.data.data.photo);
 
     setForm({
       ...formUpdateProduct,
@@ -89,6 +89,13 @@ const ProductUpdate = () => {
       })
     } catch (error) {
       console.log(error);
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Update Product Failed',
+        showConfirmButton: false,
+        timer: 1500
+      })
     }
   });
   
