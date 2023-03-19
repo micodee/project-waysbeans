@@ -34,12 +34,6 @@ func (h *productControl) FindProducts(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, result.ErrorResult{Status: http.StatusBadRequest, Message: err.Error()})
 	}
-
-	// cloudinary
-	for i, p := range products {
-		imagePath := os.Getenv("PATH_FILE") + p.Photo
-		products[i].Photo = imagePath
-	}
 	return c.JSON(http.StatusOK, result.SuccessResult{Status: http.StatusOK, Data: products})
 }
 
@@ -166,9 +160,9 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 	if request.Stock != 0 {
 		product.Stock = request.Stock
 	}
-	if request.Photo != "" {
+	if filepath != "" {
 		fmt.Println(resp.SecureURL + " update successfully")
-		product.Photo = resp.SecureURL
+		product.Photo = filepath
 
 	}
 
