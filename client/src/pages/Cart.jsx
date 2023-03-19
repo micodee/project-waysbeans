@@ -141,12 +141,15 @@ const Cart = (props) => {
           navigate('/profile')
         },
         onPending: function (result) {
+          navigate('/profile')
           return
         },
         onError: function (result) {
+          navigate('/profile')
           return
         },
         onClose: function () {
+          navigate('/profile')
           return
         },
       });
