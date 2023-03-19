@@ -36,7 +36,6 @@ const MainApp = () => {
   const checkUser = async () => {
     try {
       const response = await API.get('/check-auth');
-      console.log("check user success : ", response)
       // Get user data
       let payload = response.data.data;
       // Get token from local storage
@@ -48,7 +47,6 @@ const MainApp = () => {
       });
       setIsLoading(false)
     } catch (error) {
-      console.log("check user failed : ", error);
       dispatch({
         type: 'AUTH_ERROR',
       });
@@ -59,7 +57,6 @@ const MainApp = () => {
   const [ProductsList, SetProductsList] = useState([]);
   const [TransactionsList, SetTransactionsList] = useState([]);
   const [UserCarts, SetUserCarts] = useState([]);
-  console.log(UserCarts);
 
     useQuery('productsCache', async () => {
       try {

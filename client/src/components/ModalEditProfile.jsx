@@ -14,7 +14,6 @@ const ModalEditProfile = (props) => {
   // agar submit tidak merefresh
 
   const [_, dispatch] = useContext(UserContext);
-  console.log(_);
 
   const [formLogin, setFormLogin] = useState({
     name: "",
@@ -35,8 +34,6 @@ const ModalEditProfile = (props) => {
       e.preventDefault();
   
       const response = await API.post('/login', formLogin);
-  
-      console.log("login success : ", response)
 
       // Send data to useContext
       dispatch({

@@ -49,13 +49,13 @@ const Home = () => {
         {asceding?.map((item) => {
           return (
             <Card
-              key={item.id}
+              key={item?.id}
               style={{ padding: "0", cursor: "pointer" }}
-              onClick={() => navigate(`/detail/${item.id}`)}
+              onClick={() => navigate(`/detail/${item?.id}`)}
             >
               <Card.Img
                 variant="top"
-                src={item.photo}
+                src={item?.photo}
                 style={{ width: "100%", height: "320px", objectFit: "cover" }}
               />
               <Card.Body style={{ backgroundColor: "#F6E6DA" }}>
@@ -66,7 +66,7 @@ const Home = () => {
                     fontSize: "18px",
                   }}
                 >
-                  {item.name}
+                  {item?.name}
                 </Card.Title>
                 <Card.Text>
                   <p
@@ -77,7 +77,7 @@ const Home = () => {
                       fontSize: "14px",
                     }}
                   >
-                    Rp.{item.price}
+                    Rp.{item?.price}
                   </p>
                   <p
                     style={{
@@ -87,7 +87,7 @@ const Home = () => {
                       fontSize: "14px",
                     }}
                   >
-                    Stock : {item.stock}
+                    Stock : {item?.stock}
                   </p>
                 </Card.Text>
               </Card.Body>

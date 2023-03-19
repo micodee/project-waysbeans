@@ -160,7 +160,7 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	
+
 		fmt.Println(resp.SecureURL + " update successfully")
 		product.Photo = resp.SecureURL
 
