@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"waysbeans/database"
 	"waysbeans/pkg/mysql"
 	"waysbeans/routes"
@@ -31,7 +32,7 @@ func main() {
 	routes.Routes(e.Group("api/v1"))
 	e.Static("/uploads", "./uploads")
 
-	port := "5001"
+	port := os.Getenv("PORT")
 	fmt.Println("server running on port", port)
-	e.Logger.Fatal(e.Start("localhost:" + port))
+	e.Logger.Fatal(e.Start(":" + port))
 }
