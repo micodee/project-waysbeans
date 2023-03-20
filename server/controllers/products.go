@@ -98,12 +98,13 @@ func (h *productControl) CreateProduct(c echo.Context) error {
 
 	// submit TO DATABASE tb PRODUCTS
 	product := models.Product{
-		Name:        request.Name,
-		Price:       request.Price,
-		Description: request.Description,
-		Stock:       request.Stock,
-		Photo:       resp.SecureURL,
-		UserID:      int(userId),
+		Name:          request.Name,
+		Price:         request.Price,
+		Description:   request.Description,
+		Stock:         request.Stock,
+		Photo:         resp.SecureURL,
+		PhotoPublicID: resp.PublicID,
+		UserID:        int(userId),
 	}
 
 	// run REPOSITORY create product
@@ -148,18 +149,18 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 		product.Stock = request.Stock
 	}
 	if filepath != "" {
-			// cloudinary
-	var ctx = context.Background()
-	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
-	var API_KEY = os.Getenv("API_KEY")
-	var API_SECRET = os.Getenv("API_SECRET")
+		// cloudinary
+		var ctx = context.Background()
+		var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+		var API_KEY = os.Getenv("API_KEY")
+		var API_SECRET = os.Getenv("API_SECRET")
 
-	// cloudinary
-	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
-	resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbeans"})
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+		// cloudinary
+		cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+		resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbeans"})
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 
 		fmt.Println(resp.SecureURL + " update successfully")
 		product.Photo = resp.SecureURL
@@ -193,8 +194,8 @@ func (h *productControl) DeleteProduct(c echo.Context) error {
 	// create a new cloudinary
 	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
 
-	fileName := product.Photo
-	del, err := cld.Upload.Destroy(ctx, uploader.DestroyParams{PublicID: product.Photo})
+	fileName := product.PhotoPublicID
+	del, err := cld.Upload.Destroy(ctx, uploader.DestroyParams{PublicID: fileName})
 	if err != nil {
 		fmt.Println("Failed to delete file"+fileName+":", err)
 		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
