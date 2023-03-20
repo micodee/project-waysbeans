@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components/Components";
 import { Cart, Home, ListIncome, ListProduct, ProductAdd, ProductDetail, ProductUpdate, Transaction } from "../pages/Pages";
-import dataTransaction from "../assets/json/transaction.json"
 import RouteAdmin from "./RouteAdmin";
 import RouteUser from "./RouteUser";
 import { API, setAuthToken } from '../config/api';
@@ -14,24 +13,6 @@ const MainApp = () => {
   let navigate = useNavigate();
   const [state, dispatch] = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    // Redirect Auth but just when isLoading is false
-    if (!isLoading) {
-      if (state.isLogin === false) {
-        navigate('/');
-      }
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-      checkUser();
-    } else {
-      setIsLoading(false)
-    }
-  }, []);
 
   const checkUser = async () => {
     try {
@@ -89,6 +70,23 @@ const MainApp = () => {
     });
 
 
+    useEffect(() => {
+      // Redirect Auth but just when isLoading is false
+      if (!isLoading) {
+        if (state.isLogin === false) {
+          navigate('/');
+        }
+      }
+    }, [isLoading]);
+  
+    useEffect(() => {
+      if (localStorage.token) {
+        setAuthToken(localStorage.token);
+        checkUser();
+      } else {
+        setIsLoading(false)
+      }
+    }, []);
 
   return (
     <>

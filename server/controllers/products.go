@@ -194,7 +194,7 @@ func (h *productControl) DeleteProduct(c echo.Context) error {
 	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
 
 	fileName := product.Photo
-	del, err := cld.Upload.Destroy(ctx, uploader.DestroyParams{PublicID: fileName})
+	del, err := cld.Upload.Destroy(ctx, uploader.DestroyParams{PublicID: product.Photo})
 	if err != nil {
 		fmt.Println("Failed to delete file"+fileName+":", err)
 		return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})

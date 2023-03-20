@@ -222,7 +222,7 @@ const Cart = (props) => {
           <p className="m-0 p-0">Review Your Order</p>
           <Col className="header col-7 d-flex justify-content-center">
             <div className="col-12">
-              {asceding
+              {props.UserCarts
                 ?.filter((e) => e.user_id === props.user.id)
                 .map((item) => {
                   return (
