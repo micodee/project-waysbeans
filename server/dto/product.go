@@ -3,14 +3,15 @@ package dto
 import "waysbeans/models"
 
 type ProductResponse struct {
-	ID          int                  `json:"id" gorm:"primary_key:auto_increment"`
-	Name        string               `json:"name"`
-	Price       int                  `json:"price"`
-	Description string               `json:"description"`
-	Stock       int                  `json:"stock"`
-	Photo       string               `json:"photo"`
-	UserID      int                  `json:"-"`
-	User        models.UsersRelation `json:"user"`
+	ID            int                  `json:"id" gorm:"primary_key:auto_increment"`
+	Name          string               `json:"name"`
+	Price         int                  `json:"price"`
+	Description   string               `json:"description"`
+	Stock         int                  `json:"stock"`
+	Photo         string               `json:"photo"`
+	PhotoPublicID string               `json:"image_public_id"`
+	UserID        int                  `json:"-"`
+	User          models.UsersRelation `json:"user"`
 }
 
 type CreateProductRequest struct {

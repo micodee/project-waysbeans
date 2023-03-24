@@ -155,14 +155,23 @@ func (h *productControl) UpdateProduct(c echo.Context) error {
 		var API_KEY = os.Getenv("API_KEY")
 		var API_SECRET = os.Getenv("API_SECRET")
 
-		// cloudinary
+		// cloudinary upload new image
 		cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
 		resp, err := cld.Upload.Upload(ctx, filepath, uploader.UploadParams{Folder: "waysbeans"})
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-
 		fmt.Println(resp.SecureURL + " update successfully")
+
+		// cloudinary delete old image
+		fileName := product.PhotoPublicID
+		del, err := cld.Upload.Destroy(ctx, uploader.DestroyParams{PublicID: fileName})
+		if err != nil {
+			fmt.Println("Failed to delete file"+fileName+":", err)
+			return c.JSON(http.StatusInternalServerError, result.ErrorResult{Status: http.StatusInternalServerError, Message: err.Error()})
+		}
+		fmt.Println(fileName+" deleted successfully", del)
+
 		product.Photo = resp.SecureURL
 
 	}
