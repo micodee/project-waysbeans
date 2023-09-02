@@ -6,6 +6,7 @@ import { useMutation } from 'react-query';
 import { API, setAuthToken } from "../config/api";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/contextUser";
+import { useLoginMutation } from "../store/services/account";
 
 const ModalLogin = (props) => {
   let navigate = useNavigate();
@@ -26,54 +27,88 @@ const ModalLogin = (props) => {
     });
   };
 
-  const SubmitLogin = useMutation(async (e) => {
-    try {
+  
+  const [login] = useLoginMutation()
+  const SubmitLogin = (e) => {
       e.preventDefault();
-  
-      const response = await API.post('/login', formLogin);
-  
-      console.log("login success : ", response)
 
-      // Send data to useContext
-      dispatch({
-        type: 'LOGIN_SUCCESS',
-        payload: response.data.data,
-      });
-      setAuthToken(response.data.data.token);
-  
-      setFormLogin({
-        email: '',
-        password: '',
-      });
-      hideModal()
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Login Success',
-        showConfirmButton: false,
-        timer: 1500
-      })
+      login(formLogin).then(res => {
+        if(res?.data?.status === 200){
 
-      // Status check
-      if (response.data.data.role === 'admin') {
-        navigate('/list-income');
-        window.location.reload();
-      } else if (response.data.data.role === 'user') {
-        navigate('/profile');
-        window.location.reload();
-      } else {
-        navigate('/')
-      }
-    } catch (error) {
-      Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: 'Login Failed',
-        showConfirmButton: false,
-        timer: 1500
+          setFormLogin({
+            email: '',
+            password: '',
+          });
+
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Login Success',
+            showConfirmButton: false,
+            timer: 1500
+          })
+
+          // hideModal()
+          navigate('/')
+        } else {
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Login Failed',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
       })
-    }
-  });
+  }
+
+  // const SubmitLogin = useMutation(async (e) => {
+  //   try {
+  //     e.preventDefault();
+      
+  //     const response = await API.post('/login', formLogin);
+
+  //     // Send data to useContext
+  //     dispatch({
+  //       type: 'LOGIN_SUCCESS',
+  //       payload: response.data.data,
+  //     });
+  //     setAuthToken(response.data.data.token);
+  
+  //     setFormLogin({
+  //       email: '',
+  //       password: '',
+  //     });
+  //     hideModal()
+  //     Swal.fire({
+  //       position: 'center',
+  //       icon: 'success',
+  //       title: 'Login Success',
+  //       showConfirmButton: false,
+  //       timer: 1500
+  //     })
+
+  //     // Status check
+  //     // if (response.data.data.role === 'admin') {
+  //     //   navigate('/list-income');
+  //     //   window.location.reload();
+  //     // } else if (response.data.data.role === 'user') {
+  //     //   navigate('/');
+  //     //   window.location.reload();
+  //     // } else {
+  //     //   navigate('/')
+  //     // }
+  //     navigate('/')
+  //   } catch (error) {
+  //     Swal.fire({
+  //       position: 'center',
+  //       icon: 'error',
+  //       title: 'Login Failed',
+  //       showConfirmButton: false,
+  //       timer: 1500
+  //     })
+  //   }
+  // });
 
 
   return (
@@ -85,7 +120,7 @@ const ModalLogin = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={(e) => SubmitLogin.mutate(e)}>
+          <Form onSubmit={SubmitLogin}>
             <Form.Group className="mb-3">
               <Form.Control type="email" placeholder="Email" name="email" className="formInput" value={formLogin.email} onChange={ChangeLogin} />
             </Form.Group>

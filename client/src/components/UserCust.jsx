@@ -24,7 +24,7 @@ const UserCust = (props) => {
   };
   return (
     <div>
-      <Form className="d-flex align-items-center gap-3">
+      <Form className="d-flex align-items-center gap-1">
         <Link to="/cart" className="position-relative">
           <img
             src={`img/nav-cart.png`}
@@ -54,8 +54,8 @@ const UserCust = (props) => {
               src={`img/drop-profile.png`}
               alt="icon"
               style={{
-                width: "60px",
-                height: "60px",
+                width: "50px",
+                height: "50px",
                 cursor: "pointer",
               }}
             />

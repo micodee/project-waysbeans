@@ -19,22 +19,22 @@ const ProductUpdate = () => {
     stock: '',
   }); //Store product data
 
-  async function getDataUpdate() {
-    const responseProduct = await API.get('/product/' + id);
-    setImageUrl(responseProduct.data.data.photo);
+    async function getDataUpdate() {
+      const responseProduct = await API.get('/product/' + id);
+      setImageUrl(responseProduct.data.data.photo);
 
-    setForm({
-      ...formUpdateProduct,
-      name: responseProduct.data.data.name,
-      desc: responseProduct.data.data.description,
-      price: responseProduct.data.data.price,
-      stock: responseProduct.data.data.stock,
-    });
-  }
+      setForm({
+        ...formUpdateProduct,
+        name: responseProduct.data.data.name,
+        desc: responseProduct.data.data.description,
+        price: responseProduct.data.data.price,
+        stock: responseProduct.data.data.stock,
+      });
+    }
 
-  useEffect(() => {
-    getDataUpdate()
-  }, []);
+    useEffect(() => {
+      getDataUpdate()
+    }, []);
 
    // Handle change data on form
    const handleChange = (e) => {
@@ -70,13 +70,9 @@ const ProductUpdate = () => {
       formData.set('name', formUpdateProduct.name);
       formData.set('desc', formUpdateProduct.desc);
       formData.set('price', formUpdateProduct.price);
-      formData.set('stock', formUpdateProduct.stock);
+      formData.set('stock', formUpdateProduct.stock); 
 
-      const response = await API.patch(
-        '/product/' + id,
-        formData,
-        config
-      );
+      const response = await API.patch('/product/' + id, formData, config);
       console.log(response.data);
 
       navigate('/list-product');
