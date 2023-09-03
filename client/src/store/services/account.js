@@ -3,6 +3,18 @@ import { waysbeansAPI } from "../waysbeansAPI";
 export const AccountAPI = waysbeansAPI.injectEndpoints({
  endpoints: builder => ({
 
+  checkAuth: builder.query({
+   query: ({token = ''}) => ({
+    url: `/check-auth`,
+    method: 'GET',
+    headers: {
+     Authorization: `Bearer ${token}`,
+    },
+    providesTags: ['TagAccount'],
+   }),
+   transformResponse: (response, meta, arg) => response.data || []
+  }),
+
   login: builder.mutation({
    query: data => ({
     url: `/login`,
@@ -26,4 +38,4 @@ export const AccountAPI = waysbeansAPI.injectEndpoints({
  })
 })
 
-export const { useLoginMutation, useRegisterMutation } = AccountAPI
+export const { useCheckAuthQuery, useLoginMutation, useRegisterMutation } = AccountAPI

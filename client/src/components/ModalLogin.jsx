@@ -2,19 +2,18 @@ import React, { useContext, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Swal from 'sweetalert2'
 
-import { useMutation } from 'react-query';
-import { API, setAuthToken } from "../config/api";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/contextUser";
 import { useLoginMutation } from "../store/services/account";
+import { useDispatch } from "react-redux";
+import { setUserLoginState } from "../store/reducers/loginSlice";
 
 const ModalLogin = (props) => {
+  const dispatch = useDispatch()
+  const [login] = useLoginMutation()
+  
   let navigate = useNavigate();
 
   const {showModal, hideModal, toRegister} = props
-  // agar submit tidak merefresh
-
-  const [_, dispatch] = useContext(UserContext);
 
   const [formLogin, setFormLogin] = useState({
     email: "",
@@ -28,12 +27,20 @@ const ModalLogin = (props) => {
   };
 
   
-  const [login] = useLoginMutation()
-  const SubmitLogin = (e) => {
+  const SubmitLogin = async (e) => {
       e.preventDefault();
 
-      login(formLogin).then(res => {
+      await login(formLogin).then(res => {
+
         if(res?.data?.status === 200){
+
+          dispatch(setUserLoginState(
+            {
+              type: 'LOGIN_SUCCESS',
+              data: res.data.data,
+            }
+          ));
+          // setAuthToken(res.data.data.token);
 
           setFormLogin({
             email: '',
@@ -48,7 +55,7 @@ const ModalLogin = (props) => {
             timer: 1500
           })
 
-          // hideModal()
+          hideModal()
           navigate('/')
         } else {
           Swal.fire({
