@@ -2,13 +2,16 @@ import React, { useState } from "react";
 
 const ProductCart = (props) => {
   const [count, setCount] = useState(props.item.order_qty);
+  console.log(props.item.order_qty);
 
   const handleAdd = () => {
     setCount(count + 1);
   };
 
   const handleLess = () => {
-    if (count === 0) return;
+    if (count === 0) {
+      props.delete()
+    };
     setCount(count - 1);
   };
   return (

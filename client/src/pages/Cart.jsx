@@ -267,7 +267,7 @@ const Cart = (props) => {
                     style={{ backgroundColor: "#613D2B" }}
                     onClick={() => setModalBuy(true)}
                   >
-                    Buy
+                    Checkout
                   </Button>
                 </div>
               </div>

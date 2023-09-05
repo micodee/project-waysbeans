@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { Footer, Header } from "../components/Components";
 import {
@@ -14,38 +14,20 @@ import {
 import RouteAdmin from "./RouteAdmin";
 import RouteUser from "./RouteUser";
 import { API, setAuthToken } from "../config/api";
-import { UserContext } from "../context/contextUser";
 import { useQuery } from "react-query";
+import { useCheckAuthQuery } from "../store/services/account";
+import { useDispatch, useSelector } from "react-redux";
+import { getAccount, setUserLoginState } from "../store/reducers/loginSlice";
 
 const MainApp = () => {
-  // layar putih
+  const dispatch = useDispatch()
+  const getUser = useSelector(getAccount)
+  const { data: checkAuth } = useCheckAuthQuery({
+    token: localStorage.token
+  })
+  
   let navigate = useNavigate();
-  const [state, dispatch] = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
-
-  const checkUser = async () => {
-    try {
-      const response = await API.get("/check-auth");
-      // Get user data
-      let payload = response.data.data;
-      // Get token from local storage
-      payload.token = localStorage.token;
-      // Send data to useContext
-      dispatch({
-        type: "USER_SUCCESS",
-        payload,
-      });
-      setIsLoading(false);
-    } catch (error) {
-      dispatch({
-        type: "AUTH_ERROR",
-      });
-      setIsLoading(false);
-    }
-  };
-
-  // const { data: ProductsAPI } = useGetProductQuery();
-  // console.log(ProductsAPI);
 
   const [ProductsList, SetProductsList] = useState([]);
   const [TransactionsList, SetTransactionsList] = useState([]);
@@ -81,14 +63,34 @@ const MainApp = () => {
   useEffect(() => {
     // Redirect Auth but just when isLoading is false
     if (!isLoading) {
-      if (state.isLogin === false) {
+      if (getUser.isLogin === false) {
         navigate("/");
       }
     }
   }, [isLoading]);
 
+  const checkUser = async () => {
+    
+    if(localStorage.token) {
+        await checkAuth
+        dispatch(setUserLoginState({
+          type: 'USER_SUCCESS',
+          data: checkAuth.data,
+        }));
+
+        setIsLoading(false);
+
+    } else {
+      dispatch(setUserLoginState({
+        type: 'AUTH_ERROR',
+      }));
+
+      setIsLoading(false);
+    }
+};
+
   useEffect(() => {
-    if (localStorage.token) {
+    if (localStorage.token && checkAuth?.data) {
       setAuthToken(localStorage.token);
       checkUser();
     } else {
@@ -96,7 +98,7 @@ const MainApp = () => {
         setIsLoading(false);
       }, 3000);
     }
-  }, []);
+  }, [checkAuth]);
 
   // ** scroll to TOP
   useEffect(() => {
@@ -167,9 +169,9 @@ const MainApp = () => {
           >
             <div>
               <Header
-                IsLogin={state.user.role}
+                IsLogin={getUser.user.role}
                 UserCarts={UserCarts}
-                User={state.user}
+                User={getUser.user}
               />
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -177,8 +179,8 @@ const MainApp = () => {
                   path="/detail/:id"
                   element={
                     <ProductDetail
-                      IsLogin={state.user.role}
-                      user={state.user}
+                      IsLogin={getUser.user.role}
+                      user={getUser.user}
                       UserCarts={UserCarts}
                       SetUserCarts={SetUserCarts}
                     />
@@ -187,13 +189,13 @@ const MainApp = () => {
 
                 <Route
                   path="/"
-                  element={<RouteUser IsUser={state.user.role} />}
+                  element={<RouteUser IsUser={getUser.user.role} />}
                 >
                   <Route
                     path="/cart"
                     element={
                       <Cart
-                        user={state.user}
+                        user={getUser.user}
                         Products={ProductsList}
                         SetProductsList={SetProductsList}
                         UserCarts={UserCarts}
@@ -206,17 +208,14 @@ const MainApp = () => {
                   <Route
                     path="/profile"
                     element={
-                      <Transaction
-                        user={state.user}
-                        TransactionsList={TransactionsList}
-                      />
+                      <Transaction TransactionsList={TransactionsList} />
                     }
                   />
                 </Route>
 
                 <Route
                   path="/"
-                  element={<RouteAdmin IsAdmin={state.user.role} />}
+                  element={<RouteAdmin IsAdmin={getUser.user.role} />}
                 >
                   <Route path="/add" element={<ProductAdd />} />
                   <Route

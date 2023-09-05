@@ -6,9 +6,12 @@ import { useMutation } from 'react-query';
 import { API, setAuthToken } from "../config/api";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/contextUser";
+import { useSelector } from "react-redux";
+import { getAccount } from "../store/reducers/loginSlice";
 
 const ModalEditProfile = (props) => {
   let navigate = useNavigate();
+  const user = useSelector(getAccount).user
 
   const {showEdit, hideEdit} = props
   // agar submit tidak merefresh
@@ -16,11 +19,11 @@ const ModalEditProfile = (props) => {
   const [_, dispatch] = useContext(UserContext);
 
   const [formLogin, setFormLogin] = useState({
-    name: "",
-    email: "",
+    name: user.fullname,
+    email: user.email,
     password: "",
-    phone : "",
-    address : "",
+    phone : user.phone,
+    address : user.address,
   });
   const ChangeLogin = (e) => {
     setFormLogin({
@@ -68,7 +71,7 @@ const ModalEditProfile = (props) => {
       Swal.fire({
         position: 'center',
         icon: 'error',
-        title: 'Login Failed',
+        title: 'Edit Failed',
         showConfirmButton: false,
         timer: 1500
       })

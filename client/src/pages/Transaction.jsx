@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import data from "../assets/json/transaction.json"
 import ModalEditProfile from "../components/ModalEditProfile";
+import { useSelector } from "react-redux";
+import { getAccount } from "../store/reducers/loginSlice";
 
 const Transaction = (props) => {
-  const { user } = props
+  const user = useSelector(getAccount).user 
+  
   const [showEdit, setModalEdit] = useState(false);
   return (
     <>
@@ -26,7 +29,7 @@ const Transaction = (props) => {
             <img
               src={`/img/profile.png`}
               alt="profle"
-              style={{ width: "180px", marginRight: "1.5rem", height: "250px", objectFit: "cover" }}
+              style={{ width: "180px", marginRight: "1.5rem", height: "250px", objectFit: "cover", borderRadius: '5px' }}
             />
             <div>
               <p className="mb-1">

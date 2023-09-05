@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Form, Dropdown, Badge } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/contextUser";
 import Swal from "sweetalert2";
+import { setUserLoginState } from "../store/reducers/loginSlice";
 
 const UserCust = (props) => {
   let navigate = useNavigate();
-  const [state, dispatch] = useContext(UserContext);
+  const dispatch = useDispatch()
 
   const logout = () => {
-    console.log(state);
-    dispatch({
+    dispatch(setUserLoginState({
       type: "LOGOUT",
-    });
+    }));
     navigate("/");
     Swal.fire({
       position: "center",

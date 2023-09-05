@@ -8,7 +8,7 @@
 
 .scrollTop {
   bottom: -20%;
-  right: 1.5rem;
+  right: 1rem;
   width: 2.5rem;
   cursor: pointer;
   z-index: 99;
@@ -144,8 +144,13 @@
 
 .detail .header img {
   width: 436px;
+}
+
+.detailImg {
   height: 520px;
+  -o-object-fit: cover;
   object-fit: cover;
+  width: 100%;
 }
 
 .detailName {
@@ -228,4 +233,4 @@
   background-color: rgba(97, 61, 43, 0.2509803922);
   border: 2px solid #613D2B;
   resize: none;
-}/*# sourceMappingURL=style.css.map */
+}

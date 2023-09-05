@@ -16,13 +16,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <UserContextProvider>
-      <Provider store={store}>
-        <QueryClientProvider client={client}>
+      <QueryClientProvider client={client}>
+        <Provider store={store}>
           <Router>
             <MainApp />
           </Router>
-        </QueryClientProvider>
-      </Provider>
+        </Provider>
+      </QueryClientProvider>
     </UserContextProvider>
   </React.StrictMode>
 );
