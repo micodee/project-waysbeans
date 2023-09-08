@@ -1,0 +1,41 @@
+.home .header {
+ background-color: #DBB699;
+ padding: 3.5rem 3.5rem 8rem;
+}
+.home .header h3, .home .header p {
+ font-weight: 400;
+}
+.home .img, .home .logo {
+ width: 432px;
+}
+.home {
+ position: relative;
+ margin-top: 7rem;
+ margin-bottom: 2rem;
+}
+.home .img {
+ position: absolute;
+ right: 0;
+ top: 2rem;
+}
+.home .waves {
+ position: absolute;
+ right: 15%;
+ top: 17rem;
+ width: 352px;
+}
+
+#loader-container img {
+ width: 25%;
+}
+
+#loader {
+ animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+ 75%, 100% {
+   transform: scale(1.25);
+   opacity: 0;
+ }
+}

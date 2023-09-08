@@ -1,0 +1,21 @@
+.dropdown .profile::before {
+ content: '';
+}
+.dropdown .profile {
+ background-color: transparent !important;
+ border: none;
+}
+.dropdown .profile:hover {
+ background-color: transparent;
+ border: none;
+}
+.dropdown .menu {
+ color: #000 !important;
+ text-decoration: none !important;
+ font-weight: 600 !important;
+}
+.dropdown .menu img {
+ width: 20px;
+ height: 20px;
+ margin-right: .5rem;
+}

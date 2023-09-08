@@ -1,0 +1,42 @@
+.detail {
+ position: relative;
+ margin-top: 8rem;
+ margin-bottom: 2rem;
+}
+.detail .header {
+ padding: 0;
+}
+.detail .header img {
+ width: 436px;
+ height: 520px;
+ object-fit: cover;
+}
+
+.detailName {
+ font-weight: 900;
+ font-size: 48px;
+ color: #613D2B;
+}
+
+.detailStock {
+ color: #974A4A;
+}
+
+.detailprice {
+ text-align: right;
+ font-weight: 900;
+ font-size: 24px;
+ color: #974A4A;
+ margin-bottom: 3rem;
+ margin-top: 2rem;
+}
+
+.detaildesc {
+ text-align: justify;
+}
+
+.detailBtnAdd {
+ background-color: #613D2B;
+ color: #fff;
+ border: none;
+}

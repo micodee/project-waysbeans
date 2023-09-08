@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+* {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ font-family: 'Open Sans', sans-serif;
+}
+
+.scrollTop {
+ bottom: -20%;
+ right: 1rem;
+ width: 2.5rem; 
+ cursor: pointer; 
+ z-index: 99; 
+ filter: drop-shadow(1px 1px 0 #F6E6DA) drop-shadow(-1px -1px 0 #F6E6DA) drop-shadow(1px -1px 0 #F6E6DA) drop-shadow(-1px 1px 0 #F6E6DA);
+ background-color: #F6E6DA; 
+ border-radius: 50%;
+ transition: .3s;
+}
+
+.showTop {
+ bottom: 1rem !important;
+}

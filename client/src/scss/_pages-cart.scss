@@ -1,0 +1,37 @@
+.lessQty {
+ width: 12px;
+ height: 3px;
+ background-color: black;
+ cursor: pointer;
+ position: relative;
+}
+.lessQty::after {
+ content: '';
+ position: absolute;
+ top: -.6rem;
+ right: -.3rem;
+ padding: .7rem;
+}
+.addQty {
+ transform: rotate(90deg);
+ width: 15px;
+ height: 1.5px;
+ background-color: black;
+ cursor: pointer;
+ position: relative;
+}
+.addQty::before {
+ content: '';
+ position: absolute;
+ transform: rotate(90deg);
+ width: 15px;
+ height: 1.5px;
+ background-color: black;
+}
+.addQty::after {
+ content: '';
+ position: absolute;
+ top: -.6rem;
+ right: -.3rem;
+ padding: .7rem;
+}
