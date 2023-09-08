@@ -1,72 +1,51 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Swal from 'sweetalert2'
 
-import { useMutation } from 'react-query';
-import { API, setAuthToken } from "../config/api";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/contextUser";
 import { useSelector } from "react-redux";
 import { getAccount } from "../store/reducers/loginSlice";
+import { useEditProfileMutation } from "../store/services/account";
 
 const ModalEditProfile = (props) => {
-  let navigate = useNavigate();
   const user = useSelector(getAccount).user
 
   const {showEdit, hideEdit} = props
   // agar submit tidak merefresh
 
-  const [_, dispatch] = useContext(UserContext);
+  const [editProfile] = useEditProfileMutation()
 
-  const [formLogin, setFormLogin] = useState({
+  const [formEdit, setFormEdit] = useState({
     name: user.fullname,
     email: user.email,
     password: "",
-    phone : user.phone,
-    address : user.address,
+    phone : user.phone || "",
+    address : user.address || "",
   });
   const ChangeLogin = (e) => {
-    setFormLogin({
-      ...formLogin,
+    setFormEdit({
+      ...formEdit,
       [e.target.name]: e.target.value,
     });
   };
 
-  const SubmitLogin = useMutation(async (e) => {
-    try {
-      e.preventDefault();
-  
-      const response = await API.post('/login', formLogin);
+  const SubmitEdit = async (e) => {
+    e.preventDefault();
 
-      // Send data to useContext
-      dispatch({
-        type: 'LOGIN_SUCCESS',
-        payload: response.data.data,
-      });
-      setAuthToken(response.data.data.token);
+    const formData = new FormData();
+    formData.append('phone', formEdit.phone);
+    formData.append('address', formEdit.address);
+
+    try {
+      await editProfile(formData)
   
-      setFormLogin({
-        email: '',
-        password: '',
-      });
       hideEdit()
       Swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Login Success',
+        title: 'Edit Success',
         showConfirmButton: false,
         timer: 1500
       })
-
-      // Status check
-      if (response.data.data.role === 'admin') {
-        navigate('/list-income');
-      } else if (response.data.data.role === 'user') {
-        navigate('/profile');
-        window.location.reload();
-      } else {
-        navigate('/')
-      }
     } catch (error) {
       Swal.fire({
         position: 'center',
@@ -76,7 +55,7 @@ const ModalEditProfile = (props) => {
         timer: 1500
       })
     }
-  });
+  };
 
 
   return (
@@ -88,21 +67,21 @@ const ModalEditProfile = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={(e) => SubmitLogin.mutate(e)}>
+          <Form onSubmit={SubmitEdit}>
             <Form.Group className="mb-3">
-              <Form.Control type="text" placeholder="Full Name" name="name" className="formInput" value={formLogin.name} onChange={ChangeLogin} />
+              <Form.Control type="text" placeholder="Full Name" name="name" className="formInput" value={formEdit.name} onChange={ChangeLogin} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Control type="email" placeholder="Email" name="email" className="formInput" value={formLogin.email} onChange={ChangeLogin} />
+              <Form.Control type="email" placeholder="Email" name="email" className="formInput" value={formEdit.email} onChange={ChangeLogin} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Control type="password" placeholder="Password" name="password" className="formInput" value={formLogin.password} onChange={ChangeLogin} />
+              <Form.Control type="password" placeholder="Password" name="password" className="formInput" value={formEdit.password} onChange={ChangeLogin} />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Control type="text" placeholder="Phone" name="phone" className="formInput" value={formLogin.phone} onChange={ChangeLogin} />
+              <Form.Control type="text" placeholder="Phone" name="phone" className="formInput" value={formEdit.phone} onChange={ChangeLogin} />
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Control type="text" placeholder="Address" name="address" className="formInput" value={formLogin.address} onChange={ChangeLogin} />
+              <Form.Control type="text" placeholder="Address" name="address" className="formInput" value={formEdit.address} onChange={ChangeLogin} />
             </Form.Group>
             <Button variant="secondary col-12" type="submit" style={{ backgroundColor: "#613D2B" }}>
               Save Change

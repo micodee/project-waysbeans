@@ -23,7 +23,7 @@ const ProductCart = (props) => {
             src={props.product.photo}
             alt="product"
             height={80}
-            style={{ width: "80px" }}
+            style={{ width: "80px", objectFit: 'cover', borderRadius: '7px' }}
           />
           <div>
             <h6 style={{ fontWeight: "900", color: "#613D2B" }}>

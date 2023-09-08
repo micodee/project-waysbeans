@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { useGetProductQuery } from "../store/services/Products";
 
 const ProductDetail = (props) => {
+  const [count, setCount] = useState(1)
   const [showLogin, setModalLogin] = useState(false);
   const [showRegister, setModalRegister] = useState(false);
 
@@ -76,11 +77,22 @@ const ProductDetail = (props) => {
     }
   });
 
+  const handleAdd = () => {
+    setCount(count + 1);
+  };
+
+  const handleLess = () => {
+    if (count === 1) {
+      return 1
+    };
+    setCount(count - 1);
+  };
+
   return (
     <Container className="detail col-9">
       <Row className="d-flex justify-content-between">
         <Col className="header col-4">
-          <img src={Product.photo} alt={Product.name} className="detailImg" />
+          <img src={Product.photo} alt={Product.name} className="detailImg" style={{ borderRadius: '7px' }}/>
         </Col>
         <Col className="header col-7 d-flex justify-content-center align-items-center">
           <div className="col-10">
@@ -88,12 +100,33 @@ const ProductDetail = (props) => {
             <p className="mt-0 mb-5 detailStock">Stock : {Product.stock}</p>
             <p className="detaildesc">{Product.description}</p>
             <p className="detailprice">Rp.{Product.price}</p>
+
+            <div className="d-flex gap-5">
+              <div className="d-flex align-items-center gap-2">
+                <div onClick={handleLess} className="d-flex justify-content-center align-items-center" style={{ background: '#F6E6DA', padding: '1rem .6rem', borderRadius: '7px', cursor: 'pointer' }}>
+                  <span className="lessQty" ></span>
+                </div>
+                <span
+                  style={{
+                    backgroundColor: "#F6E6DA",
+                    padding: ".1rem .75rem",
+                    borderRadius: "5px",
+                  }}
+                >
+                  {count}
+                </span>
+                <div onClick={handleAdd} className="d-flex justify-content-center align-items-center" style={{ background: '#F6E6DA', padding: '1rem .6rem', borderRadius: '7px', cursor: 'pointer' }}>
+                  <span className="addQty" ></span>
+                </div>
+              </div>
             <Button
               onClick={(e) => addCart.mutate(e)}
-              className="col-12 detailBtnAdd"
+              className="detailBtnAdd"
+              style={{ width: '100%' }}
             >
               Add Cart
             </Button>{" "}
+            </div>
           </div>
         </Col>
       </Row>

@@ -37,7 +37,20 @@ export const AccountAPI = waysbeansAPI.injectEndpoints({
    invalidatesTags: [{type: 'TagAccount'}]
   }),
 
+  editProfile: builder.mutation({
+    query: data => ({
+     url: `/profile`,
+     method: 'PATCH',
+     body: data,
+     formData: true,
+     headers: {
+      'Authorization': `Bearer ${localStorage.token}`,
+    }
+    }),
+    invalidatesTags: [{type: 'TagAccount'}]
+   }),
+
  })
 })
 
-export const { useCheckAuthQuery, useLoginMutation, useRegisterMutation } = AccountAPI
+export const { useCheckAuthQuery, useLoginMutation, useRegisterMutation, useEditProfileMutation } = AccountAPI
