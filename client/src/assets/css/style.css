@@ -6,6 +6,22 @@
   font-family: "Open Sans", sans-serif;
 }
 
+.scrollTop {
+  bottom: -20%;
+  right: 1.5rem;
+  width: 2.5rem;
+  cursor: pointer;
+  z-index: 99;
+  filter: drop-shadow(1px 1px 0 #F6E6DA) drop-shadow(-1px -1px 0 #F6E6DA) drop-shadow(1px -1px 0 #F6E6DA) drop-shadow(-1px 1px 0 #F6E6DA);
+  background-color: #F6E6DA;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.showTop {
+  bottom: 3.5rem !important;
+}
+
 .dropdown .profile::before {
   content: "";
 }
@@ -50,13 +66,13 @@
 
 .nav .login {
   background-color: transparent;
-  color: #613d2b;
-  border: 2px solid #613d2b;
+  color: #613D2B;
+  border: 2px solid #613D2B;
   font-weight: 700;
 }
 
 .nav .register {
-  background-color: #613d2b;
+  background-color: #613D2B;
   color: #fff;
   border: none;
 }
@@ -71,17 +87,15 @@
 }
 
 .home .header {
-  background-color: #dbb699;
+  background-color: #DBB699;
   padding: 3.5rem 3.5rem 8rem;
 }
 
-.home .header h3,
-.home .header p {
+.home .header h3, .home .header p {
   font-weight: 400;
 }
 
-.home .img,
-.home .logo {
+.home .img, .home .logo {
   width: 432px;
 }
 
@@ -104,6 +118,20 @@
   width: 352px;
 }
 
+#loader-container img {
+  width: 25%;
+}
+
+#loader {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
 .detail {
   position: relative;
   margin-top: 8rem;
@@ -116,30 +144,25 @@
 
 .detail .header img {
   width: 436px;
-}
-
-.detailImg {
   height: 520px;
-  -o-object-fit: cover;
   object-fit: cover;
-  width: 100%;
 }
 
 .detailName {
   font-weight: 900;
   font-size: 48px;
-  color: #613d2b;
+  color: #613D2B;
 }
 
 .detailStock {
-  color: #974a4a;
+  color: #974A4A;
 }
 
 .detailprice {
   text-align: right;
   font-weight: 900;
   font-size: 24px;
-  color: #974a4a;
+  color: #974A4A;
   margin-bottom: 3rem;
   margin-top: 2rem;
 }
@@ -149,7 +172,7 @@
 }
 
 .detailBtnAdd {
-  background-color: #613d2b;
+  background-color: #613D2B;
   color: #fff;
   border: none;
 }
@@ -198,26 +221,11 @@
 
 .productadd .formInputProduct {
   background-color: rgba(97, 61, 43, 0.2509803922);
-  border: 2px solid #613d2b;
+  border: 2px solid #613D2B;
 }
 
 .productadd .formInputTextarea {
   background-color: rgba(97, 61, 43, 0.2509803922);
-  border: 2px solid #613d2b;
+  border: 2px solid #613D2B;
   resize: none;
-}
-
-.profileAddress {
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.profileBtn {
-  background-color: #613d2b;
-  border: none;
-}
-
-.custom-text-primary {
-  color: #613D2B !important;
-  font-size: 24px;
-}
+}/*# sourceMappingURL=style.css.map */
