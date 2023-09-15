@@ -47,7 +47,7 @@ const Transaction = (props) => {
               <p className="mb-1 mt-3">
                 <b>Address</b>
               </p>
-              <span className="profileAddress">{user.profile?.address === "" ? "-" : user.profile?.address }</span>
+              <p className="profileAddress">{user.profile?.address === "" ? "-" : user.profile?.address }</p>
               <Button className="profileBtn" onClick={() => setModalEdit(true)}>Edit Profile</Button>
             </div>
           </div>

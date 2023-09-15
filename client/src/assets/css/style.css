@@ -144,6 +144,7 @@
 
 .detail .header img {
   width: 436px;
+  border-radius: 7px;
 }
 
 .detailImg {
